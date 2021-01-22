@@ -1,7 +1,7 @@
   
 <?php
 
-include 'connectdb.php';
+// include 'connectdb.php';
 
 $email = $_POST["email"];
 $password = $_POST["password"];
