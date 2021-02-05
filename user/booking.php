@@ -7,7 +7,7 @@
 
     include '../connectdb.php';
 
-    $result = mysqli_query($connect,"SELECT * FROM booking ");
+    $result = mysqli_query($connect,"SELECT * FROM professor");
 
 ?>
 <!DOCTYPE html>
@@ -71,10 +71,6 @@
               </div>
             </div>
           </form>
-
-          <!-- Topbar Navbar -->
-          <ul class="navbar-nav ml-auto">
-
           <li class="nav-item active">
             <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
           </li>
@@ -84,6 +80,9 @@
           <li class="nav-item">
             <a class="nav-link" href="booking.php">Booking</a>
           </li>
+
+          <!-- Topbar Navbar -->
+          <ul class="navbar-nav ml-auto">
 
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
@@ -186,88 +185,122 @@
       <!-- Begin Page Content -->
       <div class="container-fluid">
 
-          <!-- Page Heading -->
-                <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
-                  <div class="carousel-inner">
-                    <div class="carousel-item active" data-interval="10000">
-                    <div class="bg-warning text-dark d-block w-100" ></div>
-                      <!-- <img src="../img/kmitl.jpg" class="d-block w-100" alt="..." height="400"> -->
-                    </div>
-                    <div class="carousel-item" data-interval="2000">
+            <!-- DataProfressor  -->
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Computer Engineer</h6>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Expert</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    <?php while ($row = mysqli_fetch_array($result)): ?>
+                        <tr>
+                          <td><?php echo $row['title'] . $row['professor_name']; ?></td>
+                          <td><?php echo $row['expert']; ?></td>
 
-                    </div>
-                    <div class="carousel-item">
+                          <!-- info -->
+                          <td><button type="button" class="btn btn-info btn-circle btn-sm" data-toggle="modal" data-target="#info_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-id-card"></i></button>
+                              <div class="modal fade" id="info_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="info_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="info_professor_ModalLabel<?php echo $row['pid']; ?>">Profile</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <div class="modal-body">
 
-                    </div>
-                  </div>
-                  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                  </a>
+                                      <p>Name : <?php echo $row['title'] . $row['professor_name']; ?></p>
+                                      <p>Expert : <?php echo $row['expert']; ?></p>
+                                      <p>Position : <?php echo $row['position']; ?></p>
+                                      <p>Office : <?php echo $row['office']; ?></p>
+                                      <p>Email : <?php echo $row['email']; ?></p>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div></td>
+
+
+                          <!-- Book -->
+                          <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#booking_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-calendar-check"></i></button>
+                              <div class="modal fade" id="booking_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="booking_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                  <div class="modal-content">
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="booking_professor_ModalLabel<?php echo $row['pid']; ?>">Booking</h5>
+                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                    </div>
+                                    <form action="booking_process.php" method="post">
+                                    <div class="modal-body">
+
+                                        <div class="form-group">
+                                          <label for="professor">Professor</label>
+                                          <input type="text" class="form-control" name = "professor_name" value = "<?php echo  $row['professor_name']; ?>" disabled><?php echo $row['title'] . $row['professor_name']; ?></input>
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label for="subject">Subject</label>
+                                          <input type="text" class="form-control" name = "subject">
+                                        </div>
+
+                                        <div class="form-group">
+                                        <label for="detail">Detail</label>
+                                        <textarea class="form-control"  name = "detail" rows="3"></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                        <label for="date">Date</label>
+                                        <input type="date" name="date">
+                                        </div>
+
+                                        <div class="form-group">
+                                        <label for="time">Time</label>
+                                        <input type="time" name="time">
+                                        </div>
+
+                                        <div class="form-group">
+                                          <label for="office">Office</label>
+                                          <input type="text" class="form-control" name = "professor_name" value = "<?php echo $row['office']; ?>" disabled>
+                                        </div>
+
+                                        <input type="hidden" name = "ีuser_name" value = "<?php echo $_SESSION['email']; ?>">
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Confirm</button>
+                                    </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div></td>
+                        </tr>
+                        <?php endwhile; ?>
+
+                    </tbody>
+                  </table>
                 </div>
+              </div>
+            </div>
 
 
-                <div class="card-deck ">
-
-                  <div class="card text-center" style="max-width: 16rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body ">
-                      <span style="font-size: 100px; color: bg-info">
-                        <i class="fas fa-laptop-code "></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="booking.php" class="btn btn-info">Computer Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                      <i class="fas fa-bolt"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Electrical Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                      <i class="fas fa-building"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Civil Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                    <i class="fas fa-wrench"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Mechanical Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                    <i class="fas fa-satellite-dish"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Telecom Engineering</a>
-                    </div>
-                  </div>
-                </div>
+          </div>
+          <!-- /.container-fluid -->
 
         </div>
 

@@ -1,13 +1,13 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['email'])) {
-        header("location: login.php");
-    }
+if (!isset($_SESSION['email'])) {
+  header("location: login.php");
+}
 
-    include '../connectdb.php';
+include '../connectdb.php';
 
-    $result = mysqli_query($connect,"SELECT * FROM booking ");
+$result = mysqli_query($connect, "SELECT * FROM booking");
 
 ?>
 <!DOCTYPE html>
@@ -55,7 +55,7 @@
 
           <a class="sidebar-brand d-flex align-items-center justify-content-center text-info" href="index.php">
             <div class="sidebar-brand-icon rotate-n-15 text-info">
-                <i class="fas fa-cogs"></i>
+              <i class="fas fa-cogs"></i>
             </div>
             <div class="sidebar-brand-text mx-3 text-info">Engineering Clinic</div>
           </a>
@@ -72,19 +72,20 @@
             </div>
           </form>
 
+
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
-          <li class="nav-item active">
-            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="webboard.php">Webboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="booking.php">Booking</a>
-          </li>
-
+            <li class="nav-item active">
+              <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="webboard.php">Webboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="booking.php">Booking</a>
+            </li>
+            
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -107,16 +108,17 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="img-profile rounded-circle" src="../img/profile.jpg">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                    <?php if(isset($_SESSION['email'])) { ?>
-                    <?php echo $_SESSION['email']; }?>
-                    </span>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <!-- <a class="dropdown-item" href="#">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" src="../img/profile.jpg">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                  <?php if (isset($_SESSION['email'])) { ?>
+                  <?php echo $_SESSION['email'];
+                  } ?>
+                </span>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -128,13 +130,13 @@
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                  <!-- <div class="dropdown-divider"></div> -->
-                  <a class="dropdown-item" href="logout.php" >
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                  </a>
-                </div>
-              </li>
+                <!-- <div class="dropdown-divider"></div> -->
+                <a class="dropdown-item" href="logout.php">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -183,93 +185,48 @@
         <!-- End of Topbar -->
 
 
-      <!-- Begin Page Content -->
-      <div class="container-fluid">
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
 
           <!-- Page Heading -->
-                <div id="carouselExampleInterval" class="carousel slide" data-ride="carousel">
-                  <div class="carousel-inner">
-                    <div class="carousel-item active" data-interval="10000">
-                    <div class="bg-warning text-dark d-block w-100" ></div>
-                      <!-- <img src="../img/kmitl.jpg" class="d-block w-100" alt="..." height="400"> -->
-                    </div>
-                    <div class="carousel-item" data-interval="2000">
 
-                    </div>
-                    <div class="carousel-item">
+          <div class="row">
 
+            <div class="col-lg-12">
+
+              <!-- Brand Buttons -->
+              <?php while ($row = mysqli_fetch_array($result)):
+                if($row['status'] == "0"){?>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
+                        <p class="m-0 text-info" ><?php echo $row['user_name'] ?></p>
+                        </div>
+                        <div class="card-body">
+                        <p>To Prof. : <?php echo $row['professor_name'] ?> </p>
+                        <div class="my-2"></div>
+                        <p>Detail : <?php echo $row['detail'] ?> </p>
+                        <div class="my-2"></div>
+                        <p>Date   : <?php echo $row['date'] ?> </p>
+                        <div class="my-2"></div>
+                        <p>Time   : <?php echo $row['time'] ?></p>
+                        <div class="my-2"></div>
+                        </div>
                     </div>
-                  </div>
-                  <a class="carousel-control-prev" href="#carouselExampleInterval" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                  </a>
-                  <a class="carousel-control-next" href="#carouselExampleInterval" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                  </a>
+              <?php } endwhile; ?>
+
                 </div>
+              </div>
+
+            </div>
 
 
-                <div class="card-deck ">
-
-                  <div class="card text-center" style="max-width: 16rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body ">
-                      <span style="font-size: 100px; color: bg-info">
-                        <i class="fas fa-laptop-code "></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="booking.php" class="btn btn-info">Computer Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                      <i class="fas fa-bolt"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Electrical Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                      <i class="fas fa-building"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Civil Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                    <i class="fas fa-wrench"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Mechanical Engineering</a>
-                    </div>
-                  </div>
-
-                  <div class="card text-center" style="max-width: 18rem;">
-                    <!-- <img class="card-img-top" src="../img/CE.png" alt="Card image cap" width="277" height="400"> -->
-                    <div class="card-body">
-                    <span style="font-size: 100px; color: bg-info">
-                    <i class="fas fa-satellite-dish"></i>
-                      </span>
-                      <!-- <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p> -->
-                      <a href="#" class="btn btn-info">Telecom Engineering</a>
-                    </div>
-                  </div>
-                </div>
+          </div>
 
         </div>
+        <!-- /.container-fluid -->
+
+      </div>
 
       <!-- End of Main Content -->
 

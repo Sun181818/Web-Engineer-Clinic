@@ -41,22 +41,22 @@
                   </div>
                   <form class="admin" action="logindb.php" method="post">
                     <div class="form-group">
-                      <input type="email" class="form-control form-control-user" name="txt_email" aria-describedby="emailHelp" placeholder="Email">
+                      <input type="email" class="form-control form-control-user" name="txt_email" aria-describedby="emailHelp" placeholder="Email" required>
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" name="txt_password" placeholder="Password">
+                      <input type="password" class="form-control form-control-user" name="txt_password" placeholder="Password" required>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                     <label for="type" class="col-sm-5 control-label">Select Type</label>
                     <div class="col-sm-12">
-                        <select name="txt_role" class="form-control">
+                        <select name="txt_role" class="form-control" required>
                             <option value="" selected="selected">- Select Role -</option>
                             <option value="officer">Officer</option>
                             <option value="manager">Manager</option>
                             <option value="systemAdmin">System Admin</option>
                         </select>
                     </div>
-                    </div>
+                    </div> -->
                     <!-- <div class="form-group">
                       <div class="custom-control custom-checkbox small">
                         <input type="checkbox" class="custom-control-input" id="customCheck">
