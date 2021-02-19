@@ -1,14 +1,14 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['email'])) {
-        header("location: login.php");
-    }
+if (!isset($_SESSION['email'])) {
+  header("location: login.php");
+}
 
 
-    include '../connectdb.php';
+include '../connectdb.php';
 
-    $result = mysqli_query($connect,"SELECT * FROM professor");
+$result = mysqli_query($connect, "SELECT * FROM professor");
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-cogs"></i>
+          <i class="fas fa-cogs"></i>
         </div>
         <div class="sidebar-brand-text mx-3">Engineering Clinic</div>
       </a>
@@ -87,7 +87,7 @@
           <i class="fas fa-history"></i>
           <span>History</span></a>
       </li>
-      
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -114,9 +114,9 @@
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
                   <i class="fas fa-search fa-sm"></i>
@@ -150,15 +150,16 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="img-profile rounded-circle" src="../img/profile.jpg">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                    <?php if(isset($_SESSION['email'])) { ?>
-                    <?php echo $_SESSION['email']; }?>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <!-- <a class="dropdown-item" href="#">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" src="../img/profile.jpg">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                  <?php if (isset($_SESSION['email'])) { ?>
+                  <?php echo $_SESSION['email'];
+                  } ?>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -170,15 +171,15 @@
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                  <!-- <div class="dropdown-divider"></div> -->
-                  <a class="dropdown-item" href="logout.php">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                  </a>
-                </div>
-              </li>
+                <!-- <div class="dropdown-divider"></div> -->
+                <a class="dropdown-item" href="logout.php">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
 
-           
+
 
           </ul>
 
@@ -189,186 +190,189 @@
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-            <!-- Page Heading -->
-            <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Tables</h1>
 
 
-            <!-- DataProfressor  -->
-            <div class="card shadow mb-4">
-              <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Profressor</h6>
-              </div>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+          <!-- DataProfressor  -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">Profressor</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>PID</th>
+                      <th>Title</th>
+                      <th>Name</th>
+                      <th>Expert</th>
+                      <th>Position</th>
+                      <th>Office</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php while ($row = mysqli_fetch_array($result)) : ?>
                       <tr>
-                        <th>PID</th>
-                        <th>Title</th>
-                        <th>Name</th>
-                        <th>Expert</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Email</th>
+                        <td><?php echo $row['pid']; ?></td>
+                        <td><?php echo $row['title']; ?></td>
+                        <td><?php echo $row['professor_name']; ?></td>
+                        <td><?php echo $row['expert']; ?></td>
+                        <td><?php echo $row['position']; ?></td>
+                        <td><?php echo $row['office']; ?></td>
+                        <td><?php echo $row['email']; ?></td>
+
+                        <!-- edit -->
+                        <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
+                          <div class="modal fade" id="update_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="update_professor_ModalLabel<?php echo $row['pid']; ?>">Edit</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <form action="update_process.php" method="post">
+                                  <div class="modal-body">
+                                    <div class="form-group">
+                                      <label for="title" class="col-form-label">Title:</label>
+                                      <input type="text" class="form-control" name="title" value="<?php echo $row['title']; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="professor_name" class="col-form-label">Name:</label>
+                                      <input type="text" class="form-control" name="professor_name" value="<?php echo $row['professor_name']; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="expert" class="col-form-label">Expert:</label>
+                                      <input type="text" class="form-control" name="expert" value="<?php echo $row['expert']; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="position" class="col-form-label">Position:</label>
+                                      <input type="text" class="form-control" name="position" value="<?php echo $row['position']; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="office" class="col-form-label">Office:</label>
+                                      <input type="text" class="form-control" name="office" value="<?php echo $row['office']; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="email" class="col-form-label">Email:</label>
+                                      <input type="text" class="form-control" name="email" value="<?php echo $row['email']; ?>">
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <input type="hidden" name="pid" value="<?php echo $row['pid']; ?>">
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+
+                        <!-- delete -->
+                        <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_professor_Modal<?php echo $row['pid']; ?>">
+                            <i class="fas fa-trash"></i>
+                          </button>
+
+                          <div class="modal fade" id="delete_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="delete_professor_ModalLabel<?php echo $row['pid']; ?>">Are you sure to delete?</h5>
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <p>PID : <?php echo $row['pid']; ?></p>
+                                  <p>Title : <?php echo $row['title']; ?></p>
+                                  <p>Profess_name : <?php echo $row['professor_name']; ?></p>
+                                  <p>Expert : <?php echo $row['expert']; ?></p>
+                                  <p>Position : <?php echo $row['position']; ?></p>
+                                  <p>Office : <?php echo $row['office']; ?></p>
+                                  <p>Email : <?php echo $row['email']; ?></p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                  <a href="delete_process.php?pid=<?php echo $row['pid']; ?>" class="btn btn-primary">
+                                    Confirm
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
                       </tr>
-                    </thead>
-                    <tbody>
-                    <?php while ($row = mysqli_fetch_array($result)): ?>
-                        <tr>
-                          <td><?php echo $row['pid']; ?></td>
-                          <td><?php echo $row['title']; ?></td>
-                          <td><?php echo $row['professor_name']; ?></td>
-                          <td><?php echo $row['expert']; ?></td>
-                          <td><?php echo $row['position']; ?></td>
-                          <td><?php echo $row['office']; ?></td>
-                          <td><?php echo $row['email']; ?></td>
+                    <?php endwhile; ?>
 
-                          <!-- edit -->
-                          <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
-                              <div class="modal fade" id="update_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="update_professor_ModalLabel<?php echo $row['pid']; ?>">Edit</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <form action="update_process.php" method="post">
-                                    <div class="modal-body">
-                                        <div class="form-group">
-                                          <label for="title" class="col-form-label">Title:</label>
-                                          <input type="text" class="form-control" name = "title" value = "<?php echo $row['title']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="professor_name" class="col-form-label">Name:</label>
-                                          <input type="text" class="form-control" name = "professor_name" value = "<?php echo $row['professor_name']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="expert" class="col-form-label">Expert:</label>
-                                          <input type="text" class="form-control" name = "expert" value = "<?php echo $row['expert']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="position" class="col-form-label">Position:</label>
-                                          <input type="text" class="form-control" name = "position" value = "<?php echo $row['position']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="office" class="col-form-label">Office:</label>
-                                          <input type="text" class="form-control" name= "office" value = "<?php echo $row['office']; ?>">
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="email" class="col-form-label">Email:</label>
-                                          <input type="text" class="form-control" name= "email" value = "<?php echo $row['email']; ?>">
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                      <input type="hidden" name = "pid" value = "<?php echo $row['pid']; ?>">
-                                      <button type="submit" class="btn btn-primary">Save</button>
-                                    </div>
-                                    </form>
+                    <tr>
+                      <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_professor_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
+
+                        <div class="modal fade" id="add_professor_Modal" tabindex="-1" role="dialog" aria-labelledby="add_professor_ModalLabel" aria-hidden="true">
+                          <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="add_professor_ModalLabel">Add professor</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                              </div>
+                              <form action="add_process.php" method="post">
+                                <div class="modal-body">
+
+                                  <div class="form-group">
+                                    <label for="title" class="col-form-label">Title:</label>
+                                    <input type="text" class="form-control" name="title">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="professor_name" class="col-form-label">Name:</label>
+                                    <input type="text" class="form-control" name="professor_name">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="expert" class="col-form-label">Expert:</label>
+                                    <input type="text" class="form-control" name="expert">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="position" class="col-form-label">Position:</label>
+                                    <input type="text" class="form-control" name="position">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="office" class="col-form-label">Office:</label>
+                                    <input type="text" class="form-control" name="office">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="email" class="col-form-label">Email:</label>
+                                    <input type="text" class="form-control" name="email">
                                   </div>
                                 </div>
-                              </div></td>
-
-
-                          <!-- delete -->
-                          <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_professor_Modal<?php echo $row['pid']; ?>">
-                          <i class="fas fa-trash"></i>
-                              </button>
-
-                              <div class="modal fade" id="delete_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="delete_professor_ModalLabel<?php echo $row['pid']; ?>">Are you sure to delete?</h5>
-                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <p>PID : <?php echo $row['pid']; ?></p>
-                                      <p>Title : <?php echo $row['title']; ?></p>
-                                      <p>Profess_name : <?php echo $row['professor_name']; ?></p>
-                                      <p>Expert : <?php echo $row['expert']; ?></p>
-                                      <p>Position : <?php echo $row['position']; ?></p>
-                                      <p>Office : <?php echo $row['office']; ?></p>
-                                      <p>Email : <?php echo $row['email']; ?></p>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                      <a href="delete_process.php?pid=<?php echo $row['pid']; ?>" class="btn btn-primary">
-                                      Confirm
-                                      </a>
-                                    </div>
-                                  </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-primary">Confirm</button>
                                 </div>
-                              </div></td>
-                        </tr>
-                        <?php endwhile; ?>
-
-                      <tr>
-                        <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_professor_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
-
-                      <div class="modal fade" id="add_professor_Modal" tabindex="-1" role="dialog" aria-labelledby="add_professor_ModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="add_professor_ModalLabel">Add professor</h5>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                              </button>
+                              </form>
                             </div>
-                            <form action="add_process.php" method="post">
-                            <div class="modal-body">
-
-                                <div class="form-group">
-                                  <label for="title" class="col-form-label">Title:</label>
-                                  <input type="text" class="form-control" name = "title">
-                                </div>
-                                <div class="form-group">
-                                  <label for="professor_name" class="col-form-label">Name:</label>
-                                  <input type="text" class="form-control" name = "professor_name">
-                                </div>
-                                <div class="form-group">
-                                  <label for="expert" class="col-form-label">Expert:</label>
-                                  <input type="text" class="form-control" name = "expert">
-                                </div>
-                                <div class="form-group">
-                                  <label for="position" class="col-form-label">Position:</label>
-                                  <input type="text" class="form-control" name = "position">
-                                </div>
-                                <div class="form-group">
-                                  <label for="office" class="col-form-label">Office:</label>
-                                  <input type="text" class="form-control" name= "office">
-                                </div>
-                                <div class="form-group">
-                                  <label for="email" class="col-form-label">Email:</label>
-                                  <input type="text" class="form-control" name= "email">
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-primary">Confirm</button>
-                            </div>
-                            </form>
                           </div>
                         </div>
-                      </div></td>
-                      </tr>
+                      </td>
+                    </tr>
 
-                    </tbody>
-                  </table>
-                </div>
+                  </tbody>
+                </table>
               </div>
             </div>
-
-
           </div>
-          <!-- /.container-fluid -->
+
 
         </div>
-        <!-- End of Main Content -->
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
 
     </div>
     <!-- End of Content Wrapper -->
@@ -412,10 +416,14 @@
 
   <!-- Page level plugins -->
   <script src="../vendor/chart.js/Chart.min.js"></script>
+  <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
+  <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
   <!-- Page level custom scripts -->
   <script src="../js/demo/chart-area-demo.js"></script>
   <script src="../js/demo/chart-pie-demo.js"></script>
+  <script src="../js/demo/datatables-demo.js"></script>
+
 
 </body>
 

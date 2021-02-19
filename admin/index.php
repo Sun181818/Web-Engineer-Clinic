@@ -1,13 +1,13 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['email'])) {
-        header("location: login.php");
-    }
+if (!isset($_SESSION['email'])) {
+  header("location: login.php");
+}
 
-    include '../connectdb.php';
+include '../connectdb.php';
 
-    $result = mysqli_query($connect,"SELECT * FROM booking ");
+$result = mysqli_query($connect, "SELECT * FROM booking ");
 
 ?>
 <!DOCTYPE html>
@@ -44,7 +44,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-cogs"></i>
+          <i class="fas fa-cogs"></i>
         </div>
         <div class="sidebar-brand-text mx-3">Engineering Clinic</div>
       </a>
@@ -114,9 +114,9 @@
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"> 
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
                   <i class="fas fa-search fa-sm"></i>
@@ -150,16 +150,17 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="img-profile rounded-circle" src="../img/profile.jpg">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                    <?php if(isset($_SESSION['email'])) { ?>
-                    <?php echo $_SESSION['email']; }?>
-                    </span>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <!-- <a class="dropdown-item" href="#">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" src="../img/profile.jpg">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                  <?php if (isset($_SESSION['email'])) { ?>
+                  <?php echo $_SESSION['email'];
+                  } ?>
+                </span>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -171,13 +172,13 @@
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                  <!-- <div class="dropdown-divider"></div> -->
-                  <a class="dropdown-item" href="logout.php" >
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                  </a>
-                </div>
-              </li>
+                <!-- <div class="dropdown-divider"></div> -->
+                <a class="dropdown-item" href="logout.php">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
 
 
           </ul>
@@ -197,62 +198,63 @@
             <div class="col-lg-12">
 
               <!-- Brand Buttons -->
-              <?php while ($row = mysqli_fetch_array($result)):
-                if($row['status'] == "0"){?>
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
-                  <p class="m-0 text-info" ><?php echo $row['user_name'] ?></p>
-                </div>
-                <div class="card-body">
-                  <p>To Prof. : <?php echo $row['professor_name'] ?> </p>
-                  <div class="my-2"></div>
-                  <p>Detail : <?php echo $row['detail'] ?> </p>
-                  <div class="my-2"></div>
-                  <p>Date   : <?php echo $row['date'] ?> </p>
-                  <div class="my-2"></div>
-                  <p>Time   : <?php echo $row['time'] ?></p>
-                  <div class="my-2"></div>
-                    <form action="approve.php" method="post">
-                                        <div class="form-group">
-                                          <input type="hidden" class="form-control" name = "status" value = "1">
-                                        </div>
-                                        <input type="hidden" name = "bid" value = "<?php echo $row['bid']; ?>">
-                                        <button type="submit" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
-                                      <i class="fas fa-trash">
-                                      <span class="text">Reject</span></i>
-                                    </span></button>
-                    </form>
-                    <form action="approve.php" method="post">
-                                        <div class="form-group">
-                                          <input type="hidden" class="form-control" name = "status" value = "2">
-                                        </div>
-                                        <input type="hidden" name = "bid" value = "<?php echo $row['bid']; ?>">
-                                        <button type="submit" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
-                                      <i class="fas fa-check">
-                                      <span class="text">Accept</span></i>
-                                    </span></button>
-                    </form>
-                </div>
-              </div>
-              <?php } endwhile; ?>
-
-                </div>
-              </div>
+              <?php while ($row = mysqli_fetch_array($result)) :
+                if ($row['status'] == "0") { ?>
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
+                      <p class="m-0 text-info"><?php echo $row['user_name'] ?></p>
+                    </div>
+                    <div class="card-body">
+                      <p>To Prof. : <?php echo $row['professor_name'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Detail : <?php echo $row['detail'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Date : <?php echo $row['date'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Time : <?php echo $row['time'] ?></p>
+                      <div class="my-2"></div>
+                      <form action="approve.php" method="post">
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" name="status" value="1">
+                        </div>
+                        <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                        <button type="submit" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
+                            <i class="fas fa-trash">
+                              <span class="text">Reject</span></i>
+                          </span></button>
+                      </form>
+                      <form action="approve.php" method="post">
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" name="status" value="2">
+                        </div>
+                        <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                        <button type="submit" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
+                            <i class="fas fa-check">
+                              <span class="text">Accept</span></i>
+                          </span></button>
+                      </form>
+                    </div>
+                  </div>
+              <?php }
+              endwhile; ?>
 
             </div>
-
-
           </div>
 
         </div>
-        <!-- /.container-fluid -->
+
 
       </div>
-      <!-- End of Main Content -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- /.container-fluid -->
+
+  </div>
+  <!-- End of Main Content -->
+
+  </div>
+  <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->

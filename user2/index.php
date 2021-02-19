@@ -150,6 +150,7 @@
                 <h6 class="dropdown-header bg-info">
                   Notifications
                 </h6>
+
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-info">
@@ -157,10 +158,11 @@
                     </div>
                   </div>
                   <div>
-                    <span class="font-weight-bold">New booking request BID 003 !</span>
+                    <span class="font-weight-bold">It's almost time for an subject ... !</span>
                     <div class="small text-gray-500">December 12, 2020</div>
                   </div>
                 </a>
+
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-success">
@@ -168,10 +170,23 @@
                     </div>
                   </div>
                   <div>
-                    <span class="font-weight-bold">New booking request BID 004 !</span>
+                    <span class="font-weight-bold">Cancel booking from ...!</span>
                     <div class="small text-gray-500">December 7, 2020</div>
                   </div>
                 </a>
+
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Successfully booking subject ... !</span>
+                    <div class="small text-gray-500">December 7, 2020</div>
+                  </div>
+                </a>
+
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
             </li>

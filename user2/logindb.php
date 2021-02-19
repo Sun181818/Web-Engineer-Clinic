@@ -6,7 +6,7 @@
 
     if (isset($_POST['btn_login'])) {
         $email = $_POST['txt_email']; // textbox name
-        $password = $_POST['txt_password']; // password
+        $password = md5($_POST['txt_password']); // password
 
         if (empty($email)) {
             $errorMsg[] = "Please enter email";
@@ -28,12 +28,12 @@
                         if ($email == $dbemail AND $password == $dbpassword) {
 
                             $_SESSION['email'] = $dbemail;
-                            $_SESSION['success'] = "... Successfully Login...";
+                            $_SESSION['success'] = "Successfully Login";
                             header("location: index.php");
 
                         }
                     } else {
-                        $_SESSION['error'] = "Wrong email or password or role";
+                        $_SESSION['error'] = "Wrong email or password";
                         header("location: login.php");
                     }
                 }

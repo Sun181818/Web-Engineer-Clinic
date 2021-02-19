@@ -1,14 +1,14 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['email'])) {
-        header("location: login.php");
-    }
+if (!isset($_SESSION['email'])) {
+  header("location: login.php");
+}
 
 
-    include '../connectdb.php';
+include '../connectdb.php';
 
-    $result = mysqli_query($connect,"SELECT * FROM user");
+$result = mysqli_query($connect, "SELECT * FROM user");
 ?>
 
 <!DOCTYPE html>
@@ -44,7 +44,7 @@
       <!-- Sidebar - Brand -->
       <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
         <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-cogs"></i>
+          <i class="fas fa-cogs"></i>
         </div>
         <div class="sidebar-brand-text mx-3">Engineering Clinic</div>
       </a>
@@ -87,7 +87,7 @@
           <i class="fas fa-history"></i>
           <span>History</span></a>
       </li>
-      
+
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -114,9 +114,9 @@
           </button>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
                 <button class="btn btn-primary" type="button">
                   <i class="fas fa-search fa-sm"></i>
@@ -150,15 +150,16 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="img-profile rounded-circle" src="../img/profile.jpg">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                    <?php if(isset($_SESSION['email'])) { ?>
-                    <?php echo $_SESSION['email']; }?>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <!-- <a class="dropdown-item" href="#">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img class="img-profile rounded-circle" src="../img/profile.jpg">
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                  <?php if (isset($_SESSION['email'])) { ?>
+                  <?php echo $_SESSION['email'];
+                  } ?>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -170,13 +171,13 @@
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                  <!-- <div class="dropdown-divider"></div> -->
-                  <a class="dropdown-item" href="logout.php">
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                  </a>
-                </div>
-              </li>
+                <!-- <div class="dropdown-divider"></div> -->
+                <a class="dropdown-item" href="logout.php">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
 
 
           </ul>
@@ -184,48 +185,48 @@
         </nav>
         <!-- End of Topbar -->
 
-        
+
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-            <!-- Page Heading -->
-            <h1 class="h3 mb-2 text-gray-800">Tables</h1>
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800">Tables</h1>
 
-            <!-- DataUser  -->
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">User</h6>
-                </div>
-                <div class="card-body">
-                  <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                      <thead>
-                        <tr>
-                          <th>UID</th>
-                          <th>Name</th>
-                          <th>Email</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                      <?php while ($row = mysqli_fetch_array($result)): ?>
-                        <tr>
-                          <td><?php echo $row['uid'] ?></td>
-                          <td><?php echo $row['user_name'] ?></td>
-                          <td><?php echo $row['email'] ?></td>
-                        </tr>
-                        <?php endwhile; ?>
+          <!-- DataUser  -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
+              <h6 class="m-0 font-weight-bold text-primary">User</h6>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>UID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php while ($row = mysqli_fetch_array($result)) : ?>
+                      <tr>
+                        <td><?php echo $row['uid'] ?></td>
+                        <td><?php echo $row['user_name'] ?></td>
+                        <td><?php echo $row['email'] ?></td>
+                      </tr>
+                    <?php endwhile; ?>
 
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                  </tbody>
+                </table>
               </div>
-  
+            </div>
           </div>
-          <!-- /.container-fluid -->
-  
+
         </div>
-        <!-- End of Main Content -->
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
 
     </div>
     <!-- End of Content Wrapper -->

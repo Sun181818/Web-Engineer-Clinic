@@ -37,14 +37,14 @@
               <div class="col-lg-12">
                 <div class="p-5">
                   <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">Engineering Clinic</h1>
+                    <h1 class="h4 text-gray-900 mb-4">Login</h1>
                   </div>
                   <form class="user" action="logindb.php" method="post">
                     <div class="form-group">
-                      <input type="email" class="form-control form-control-user" name="txt_email" aria-describedby="emailHelp" placeholder="Email">
+                      <input type="email" class="form-control form-control-user" name="txt_email" aria-describedby="emailHelp" placeholder="Email" required>
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control form-control-user" name="txt_password" placeholder="Password">
+                      <input type="password" class="form-control form-control-user" name="txt_password" placeholder="Password" required>
                     </div>
 
                     <!-- <div class="form-group">
