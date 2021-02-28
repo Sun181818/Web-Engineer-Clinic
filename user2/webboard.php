@@ -61,11 +61,11 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                     </a>
 
                     <!-- Topbar Search -->
-                    <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-info" type="button">
+                                <button class="btn btn-info" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
@@ -83,6 +83,9 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="booking.php">Booking</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="professor_reg.php">Regsiter Professor</a>
                         </li>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -289,7 +292,7 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                                                 </td>
 
                                             <?php endwhile; ?>
-
+                                            <!--add topic-->
                                             <tr>
                                                 <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
 
@@ -316,10 +319,18 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                                                                         <div class="form-group">
                                                                             <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
                                                                         </div>
+                                                                        <div class="form-group">
+                                                                            <label for="pic" class="col-form-label">Picture:</label></br>
+                                                                            <form method="post" enctype="multipart/form-data">
+                                                                                <input type="file" name="image" id="image" />
+                                                                                <!--br />
+                                                                                <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-info" /-->
+                                                                            </form>
+                                                                        </div>
                                                                     </div>
                                                                     <div class="modal-footer">
                                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-info">Confirm</button>
+                                                                        <button type="submit" name="insert" id="insert" value="Insert" class="btn btn-info">Confirm</button>
                                                                     </div>
                                                                 </form>
                                                             </div>

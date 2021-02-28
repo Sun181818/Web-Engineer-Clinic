@@ -17,17 +17,20 @@
                 $select_stmt = $db->prepare("SELECT email, password FROM user WHERE email = :uemail AND password = :upassword");
                 $select_stmt->bindParam(":uemail", $email);
                 $select_stmt->bindParam(":upassword", $password);
+                // $select_stmt->bindParam(":uuid", $uid);
                 $select_stmt->execute();
 
                 while($row = $select_stmt->fetch(PDO::FETCH_ASSOC)) {
                     $dbemail = $row['email'];
                     $dbpassword = $row['password'];
+                    // $dbuid = $row['uid'];
                 }
                 if ($email != null AND $password != null) {
                     if ($select_stmt->rowCount() > 0) {
                         if ($email == $dbemail AND $password == $dbpassword) {
 
                             $_SESSION['email'] = $dbemail;
+                            // $_SESSION['uid'] = $dbuid;
                             $_SESSION['success'] = "Successfully Login";
                             header("location: index.php");
 

@@ -1,3 +1,47 @@
+<?php include '../connectdb.php';
+
+    // // //print_r($_POST['title']);
+    // $rid = $_POST['rid'];
+    // $status = $_POST['status'];
+
+    // $q = "UPDATE request SET status = '$status' WHERE rid = '$rid'";
+
+
+    // $result = mysqli_query($connect, $q );
+
+    // if($result) {
+    //     header("Location: index.php");
+    //     //echo "Success";
+    // }
+    // else {
+    //     echo "Fail" . mysqli_error($connect);
+    // }
+
+    // mysqli_close($connect);
+
+    // if(isset($_POST['submit2'])) {
+
+    //   $title = $_POST['title'];
+    //   $expert = $_POST['expert'];
+    //   $position = $_POST['position'];
+    //   $office = $_POST['office'];
+    //   $email = $_SESSION['email'];
+
+    //   $query = "UPDATE user SET title = '$title', expert = '$expert', position = '$position', office = '$office' WHERE email = '$email'";
+    //   $result = mysqli_query($connect,$query);
+
+    //       if($result) {
+    //           $_SESSION['success'] = "Insert user successfully";
+    //           header("location: index.php");
+    //       }
+    //       else{
+    //           $_SESSION['error'] = "Someting went wrong";
+    //           header("location: index.php");
+    //       }
+
+    // }
+?>
+
 <?php
 session_start();
 
@@ -7,9 +51,11 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM booking where status like 1 or status like 2");
+$result = mysqli_query($connect, "SELECT * FROM request ");
 
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -33,6 +79,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 1 or s
 </head>
 
 <body id="page-top">
+
 
   <!-- Page Wrapper -->
   <div id="wrapper">
@@ -73,18 +120,6 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 1 or s
             <a class="collapse-item" href="table_booking.php">Booking</a>
           </div>
         </div>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="aWebboard.php">
-          <i class="fas fa-newspaper"></i>
-          <span>Webboard</span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="approve_professor.php">
-          <i class="fas fa-user-check"></i>
-          <span>Approve</span></a>
       </li>
 
       <li class="nav-item">
@@ -202,133 +237,79 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 1 or s
         <div class="container-fluid">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-1 text-gray-800">History</h1>
+          <h1 class="h3 mb-4 text-gray-800">Approve Professor</h1>
 
-          <!-- DataProfressor  -->
-          <div class="card shadow mb-4">
-            <?php if ($result->num_rows > 0) { ?>
-              <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table table-bordered" id="historyTable" width="100%" cellspacing="0">
-                    <thead>
-                      <tr>
-                        <th>BID</th>
-                        <th>Subject</th>
-                        <th>U_Name</th>
-                        <th>P_Name</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php while ($row = mysqli_fetch_array($result)) : ?>
-                        <tr>
-                          <td><?php echo $row['bid'] ?></td>
-                          <td><?php echo $row['subject'] ?></td>
-                          <td><?php echo $row['user_name'] ?></td>
-                          <td><?php echo $row['professor_name'] ?></td>
-                          <td><?php echo $row['date'] ?></td>
-                          <td><?php echo $row['time'] ?></td>
-                          <td><?php if ($row['status'] == "1") { ?>
-                              <span class="badge badge-danger">Rejected</span>
-                            <?php } else if ($row['status'] == "2") { ?>
-                              <span class="badge badge-success">Accepted</span>
-                            <?php } ?>
-                          </td>
-                        </tr>
-                      <?php endwhile; ?>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            <?php } else { ?>
-              <div class="card-body">
-                <div class="text-center">
-                  <h2>Not found</h2>
-                </div>
-              </div>
-            <?php } ?>
-          </div>
-
-
-          <!-- Content Row 
           <div class="row">
 
-            Border Left Utilities 
             <div class="col-lg-12">
 
-              <div class="card mb-4 py-3 border-left-primary">
-                <div class="card-body">
-                  <p>Add 004 Prof. ผศ.ดร. อสุชัย ขำทอง </p>
-                  <p>By Officer : อสุจิน รินนํ้า</p>
-                  <div class="my-2"></div>
-                  <a href="#" class="btn btn-danger btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-trash"></i>
-                    </span>
-                    <span class="text">Reject</span>
-                  </a>
-                  <a href="#" class="btn btn-success btn-icon-split">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-check"></i>
-                    </span>
-                    <span class="text">Approve</span>
-                  </a>
-                </div>
+              <!-- Brand Buttons -->
+              <?php while ($row = mysqli_fetch_array($result)) :
+                if ($row['status'] == "0") { ?>
+                  <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                      <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['rid'] . ")" . $row['date'] ?></h6>
+                      <!-- <p class="m-0 text-info"><?php echo $row['email'] ?></p> -->
+                    </div>
+                    <div class="card-body">
+                      <p>Email : <?php echo $row['email'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Title : <?php echo $row['title'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Expert : <?php echo $row['expert'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Position : <?php echo $row['position'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Office : <?php echo $row['office'] ?></p>
+                      <div class="my-2"></div>
+                      <p>Status : <?php echo $row['status'] ?></p>
+                      <div class="my-2"></div>
 
-              </div>
+                      <form action="approve2.php" method="post">
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" name="status" value="1">
+                        </div>
+                        <input type="hidden" name="rid" value="<?php echo $row['rid']; ?>">
+                        <button type="submit1" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
+                            <i class="fas fa-trash">
+                              <span class="text">Reject</span></i>
+                          </span></button>
+                      </form>
 
+                      <form action="approve2.php" method="post">
+                        <div class="form-group">
+                          <input type="hidden" class="form-control" name="status" value="2">
+                        </div>
+                        <input type="hidden" name="rid" value="<?php echo $row['rid']; ?>">
+                        <input type="hidden" name="email" value="<?php echo $row['email']; ?>">
+                        <input type="hidden" name="title" value="<?php echo $row['title']; ?>">
+                        <input type="hidden" name="expert" value="<?php echo $row['expert']; ?>">
+                        <input type="hidden" name="position" value="<?php echo $row['position']; ?>">
+                        <input type="hidden" name="office" value="<?php echo $row['office']; ?>">
+                        <button type="submit2" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
+                            <i class="fas fa-check">
+                              <span class="text">Accept</span></i>
+                          </span></button>
+                      </form>
 
-              <div class="card mb-4 py-3 border-left-success">
-                <div class="card-body">
-                  <p>Delete 003 Prof. ผศ. ฑิฆัมพร โอสิริ </p>
-                  <p>By Officer : พสุธา จันทร์ดี</p>
-                  <p style="color: Red;">Rejected</p>
-                </div>
-              </div>
+                    </div>
+                  </div>
+              <?php }
+              endwhile; ?>
 
-              <div class="card mb-4 py-3 border-left-info">
-                <div class="card-body">
-                  <p>Delete 003 Prof. ผศ. ฑิฆัมพร โอสิริ </p>
-                  <p>By Officer : พสุธา จันทร์ดี</p>
-                  <p style="color: green;">Approved</p>
-                </div>
-              </div>
-              <div class="card mb-4 py-3 border-left-warning">
-                <div class="card-body">
-                  <p>Delete 003 Prof. ผศ. ฑิฆัมพร โอสิริ </p>
-                  <p>By Officer : พสุธา จันทร์ดี</p>
-                  <p style="color: green;">Approved</p>
-                </div>
-              </div>
-
-              <div class="card mb-4 py-3 border-left-danger">
-                <div class="card-body">
-                  <p>Delete 003 Prof. ผศ. ฑิฆัมพร โอสิริ </p>
-                  <p>By Officer : พสุธา จันทร์ดี</p>
-                  <p style="color: green;">Approved</p>
-                </div>
-              </div>
-
-              <div class="card mb-4 py-3 border-left-dark">
-                <div class="card-body">
-                  <p>Delete 003 Prof. ผศ. ฑิฆัมพร โอสิริ </p>
-                  <p>By Officer : พสุธา จันทร์ดี</p>
-                  <p style="color: green;">Approved</p>
-                </div>
-              </div>
-
-            </div>-->
-
+            </div>
+          </div>
 
         </div>
 
+
       </div>
-      <!-- /.container-fluid -->
 
     </div>
-    <!-- End of Main Content -->
+    <!-- /.container-fluid -->
+
+  </div>
+  <!-- End of Main Content -->
 
   </div>
   <!-- End of Content Wrapper -->

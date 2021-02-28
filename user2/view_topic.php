@@ -11,6 +11,11 @@ $sql = "SELECT * FROM questions WHERE id='{$_GET['id']}' ";
 $query = mysqli_query($connect, $sql);
 $result = mysqli_fetch_assoc($query);
 
+//picture
+$sqli = "SELECT * FROM uploadimage";
+$resulti = mysqli_query($connect, $sqli);
+$rowi = mysqli_fetch_assoc($resulti);
+
 // answer
 $sql_a = "SELECT * FROM answers WHERE question_id='{$_GET['id']}' ";
 $query_a = mysqli_query($connect, $sql_a);
@@ -407,7 +412,6 @@ mysqli_query($connect, $sql_u);
                           <strong>Detail:</strong><?php echo $result['detail']; ?>
                         </td>
                       </tr>
-                      
                       <tr>
                         <td style="text-align: right;">
                           <strong>Date:</strong> <?php echo $result['created']; ?>
@@ -417,6 +421,7 @@ mysqli_query($connect, $sql_u);
                   </td>
                 </tr>
               </table>
+
               <?php
               if ($rows_a > 0) {
                 $i = 1;

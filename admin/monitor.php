@@ -72,6 +72,18 @@ if (!isset($_SESSION['email'])) {
       </li>
 
       <li class="nav-item">
+        <a class="nav-link" href="aWebboard.php">
+          <i class="fas fa-newspaper"></i>
+          <span>Webboard</span></a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="approve_professor.php">
+          <i class="fas fa-user-check"></i>
+          <span>Approve</span></a>
+      </li>
+
+      <li class="nav-item">
         <a class="nav-link" href="monitor.php">
           <i class="fas fa-chart-line"></i>
           <span>Monitor</span></a>
@@ -113,7 +125,7 @@ if (!isset($_SESSION['email'])) {
             <div class="input-group">
               <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
+                <button class="btn btn-primary" type="submit">
                   <i class="fas fa-search fa-sm"></i>
                 </button>
               </div>

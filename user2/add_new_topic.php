@@ -8,9 +8,10 @@
     $email = trim($_POST['email']);
     $created = date('Y-m-d H:i:s');
     $reply = "0";
+    $file = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
 
 
-    $q = "INSERT INTO questions (topic, detail, email, created, reply) VALUES ('$topic', '$detail', '$email', '$created', '$reply')";
+    $q = "INSERT INTO questions (topic, detail, email, created, reply, pic) VALUES ('$topic', '$detail', '$email', '$created', '$reply', '$file')";
 
     $result = mysqli_query($connect, $q );
 

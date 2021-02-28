@@ -26,7 +26,7 @@
         else{
             $passwordenc = md5($password);
 
-            $query = "INSERT INTO user (user_name,email,password) VALUE('$username','$email','$passwordenc')";
+            $query = "INSERT INTO user (user_name,email,password,level) VALUE('$username','$email','$passwordenc','u')";
             $result = mysqli_query($connect,$query);
 
             if($result) {

@@ -38,6 +38,78 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
     <!-- Page Wrapper -->
     <div id="wrapper">
 
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-cogs"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Engineering Clinic</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.php">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span></a>
+            </li>
+
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>Tables</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="table_professor.php">Professor</a>
+                        <a class="collapse-item" href="table_user.php">User</a>
+                        <a class="collapse-item" href="table_booking.php">Booking</a>
+                    </div>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="aWebboard.php">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Webboard</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="approve_professor.php">
+                    <i class="fas fa-user-check"></i>
+                    <span>Approve</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="monitor.php">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Monitor</span></a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="history.php">
+                    <i class="fas fa-history"></i>
+                    <span>History</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -49,23 +121,16 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button> -->
-
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center text-info" href="index.php">
-                        <div class="sidebar-brand-icon rotate-n-15 text-info">
-                            <i class="fas fa-cogs"></i>
-                        </div>
-                        <div class="sidebar-brand-text mx-3 text-info">Engineering Clinic</div>
-                    </a>
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
 
                     <!-- Topbar Search -->
                     <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
@@ -74,16 +139,6 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <li class="nav-item active">
-                            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="webboard.php">Webboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="booking.php">Booking</a>
-                        </li>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -96,7 +151,7 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                         <div class="input-group-append">
-                                            <button class="btn btn-info" type="button">
+                                            <button class="btn btn-primary" type="button">
                                                 <i class="fas fa-search fa-sm"></i>
                                             </button>
                                         </div>
@@ -137,85 +192,46 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                             </div>
                         </li>
 
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">2</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header bg-info">
-                                    Notifications
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-info">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">New booking request BID 003 !</span>
-                                        <div class="small text-gray-500">December 12, 2020</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">New booking request BID 004 !</span>
-                                        <div class="small text-gray-500">December 7, 2020</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
 
                     </ul>
 
                 </nav>
                 <!-- End of Topbar -->
 
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <h1 class="h3 mb-1 text-gray-800">Webboard</h1>
+                    <div>
                         <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
                     </div>
                     <!-- Content Row -->
-                    <div class="row">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Topic</th>
-                                            <th>Detail</th>
-                                            <th>Email</th>
-                                            <th>Date Post</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php while ($row = mysqli_fetch_array($result)) : ?>
+                    <div class="card shadow mb-4">
+                        <div class="row">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
                                             <tr>
-                                                <td><?php echo $row['id']; ?></td>
-                                                <td><?php echo $row['topic']; ?></td>
-                                                <td><?php echo $row['detail']; ?></td>
-                                                <td><?php echo $row['email']; ?></td>
-                                                <td><?php echo $row['created']; ?></td>
+                                                <th>ID</th>
+                                                <th>Topic</th>
+                                                <th>Detail</th>
+                                                <th>Email</th>
+                                                <th>Date Post</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php while ($row = mysqli_fetch_array($result)) : ?>
+                                                <tr>
+                                                    <td><?php echo $row['id']; ?></td>
+                                                    <td><?php echo $row['topic']; ?></td>
+                                                    <td><?php echo $row['detail']; ?></td>
+                                                    <td><?php echo $row['email']; ?></td>
+                                                    <td><?php echo $row['created']; ?></td>
 
 
-                                                <!-- edit --
+                                                    <!-- edit --
                                                 <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_post_Modal<?php echo $row['id']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
                                                     <div class="modal fade" id="update_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
                                                         <div class="modal-dialog" role="document">
@@ -281,16 +297,16 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                                                 </td>
                                             </tr>//-->
 
-                                                <!--view-->
-                                                <td>
-                                                    <a href="aView.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                                                        View
-                                                    </a>
-                                                </td>
+                                                    <!--view-->
+                                                    <td>
+                                                        <a href="aView.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
+                                                            View
+                                                        </a>
+                                                    </td>
 
-                                            <?php endwhile; ?>
+                                                <?php endwhile; ?>
 
-                                            <!--<tr>
+                                                <!--<tr>
                                                 <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
 
                                                     <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
@@ -328,59 +344,68 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                                                 </td>
                                             </tr>-->
 
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
+
+                            <!-- End of Main Content -->
+
                         </div>
-
-                        <!-- End of Main Content -->
-
-                    </div>
-                    <!-- End of Content Wrapper -->
-
-                </div>
-                <!-- End of Page Wrapper -->
-
-                <!-- Scroll to Top Button-->
-                <a class="scroll-to-top rounded" href="#page-top">
-                    <i class="fas fa-angle-up"></i>
-                </a>
-
-                <!-- Logout Modal-->
-                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">?</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                            <div class="modal-footer">
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                <a class="btn btn-info" href="login.html">Logout</a>
-                            </div>
-                        </div>
+                        <!-- End of Content Wrapper -->
                     </div>
                 </div>
+                <!-- /.container-fluid -->
 
-                <!-- Bootstrap core JavaScript-->
-                <script src="../vendor/jquery/jquery.min.js"></script>
-                <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            </div>
+            <!-- End of Main Content -->
 
-                <!-- Core plugin JavaScript-->
-                <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+        </div>
+        <!-- End of Content Wrapper -->
 
-                <!-- Custom scripts for all pages-->
-                <script src="../js/Engineer-Clinic.min.js"></script>
+    </div>
+    <!-- End of Page Wrapper -->
 
-                <!-- Page level plugins -->
-                <script src="../vendor/chart.js/Chart.min.js"></script>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
 
-                <!-- Page level custom scripts -->
-                <script src="../js/demo/chart-area-demo.js"></script>
-                <script src="../js/demo/chart-pie-demo.js"></script>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="../js/Engineer-Clinic.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="../vendor/chart.js/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script>
 
 </body>
 

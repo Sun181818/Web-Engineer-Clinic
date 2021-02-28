@@ -14,7 +14,6 @@ if ($connect->connect_error) {
 }
 
 $result = mysqli_query($connect, "select * from professor where expert like '%$search%' or professor_name like '%$search%'or position like '%$search%' or email like '%$search%' or title like '%$search%'");
-$result2 = mysqli_query($connect, "select * from user where user_name like '%$search%' or email like '%$search%'");
 
 $connect->close();
 ?>
@@ -43,69 +42,10 @@ $connect->close();
 
 <body id="page-top">
 
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
-        <!-- Sidebar -->
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
-            <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.php">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-cogs"></i>
-                </div>
-                <div class="sidebar-brand-text mx-3">Engineering Clinic</div>
-            </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
-            <li class="nav-item">
-                <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
-            </li>
-
-
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="index.php" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="table_professor.php">Professor</a>
-                        <a class="collapse-item" href="table_user.php">User</a>
-                        <a class="collapse-item" href="table_booking.php">Booking</a>
-                    </div>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="monitor.php">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Monitor</span></a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="history.php">
-                    <i class="fas fa-history"></i>
-                    <span>History</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider d-none d-md-block">
-
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
-
-        </ul>
-        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -117,24 +57,42 @@ $connect->close();
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
-                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-                        <i class="fa fa-bars"></i>
-                    </button>
+                    <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+            <i class="fa fa-bars"></i>
+          </button> -->
+
+                    <a class="sidebar-brand d-flex align-items-center justify-content-center text-info" href="index.php">
+                        <div class="sidebar-brand-icon rotate-n-15 text-info">
+                            <i class="fas fa-cogs"></i>
+                        </div>
+                        <div class="sidebar-brand-text mx-3 text-info">Engineering Clinic</div>
+                    </a>
 
                     <!-- Topbar Search -->
-                    <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                    <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
                             <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
+                                <button class="btn btn-info" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
 
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item active">
+                            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="webboard.php">Webboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="booking.php">Booking</a>
+                        </li>
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -164,6 +122,7 @@ $connect->close();
                                     <?php if (isset($_SESSION['email'])) { ?>
                                     <?php echo $_SESSION['email'];
                                     } ?>
+                                </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -187,6 +146,45 @@ $connect->close();
                             </div>
                         </li>
 
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter">2</span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header bg-info">
+                                    Notifications
+                                </h6>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-info">
+                                            <i class="fas fa-file-alt text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold">New booking request BID 003 !</span>
+                                        <div class="small text-gray-500">December 12, 2020</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold">New booking request BID 004 !</span>
+                                        <div class="small text-gray-500">December 7, 2020</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                            </div>
+                        </li>
 
 
                     </ul>
@@ -210,7 +208,7 @@ $connect->close();
                         <?php if ($result->num_rows > 0) { ?>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="professorsearchTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="searchTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th>PID</th>
@@ -246,48 +244,11 @@ $connect->close();
                             </div>
                         <?php } ?>
                     </div>
-
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">User</h6>
-                        </div>
-                        <?php if ($result2->num_rows > 0) { ?>
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="usersearchTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>UID</th>
-                                                <th>Username</th>
-                                                <th>Email</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php while ($row = mysqli_fetch_array($result2)) : ?>
-                                                <tr>
-                                                    <td><?php echo $row['uid']; ?></td>
-                                                    <td><?php echo $row['user_name']; ?></td>
-                                                    <td><?php echo $row['email']; ?></td>
-                                                </tr>
-                                            <?php endwhile; ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        <?php } else { ?>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <h2>Not found</h2>
-                                </div>
-                            </div>
-                        <?php } ?>
-                    </div>
-
-
                 </div>
                 <!-- /.container-fluid -->
 
             </div>
+
             <!-- End of Main Content -->
 
         </div>
@@ -332,14 +293,10 @@ $connect->close();
 
     <!-- Page level plugins -->
     <script src="../vendor/chart.js/Chart.min.js"></script>
-    <script src="../vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="../vendor/datatables/dataTables.bootstrap4.min.js"></script>
 
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
-    <script src="../js/demo/datatables-demo.js"></script>
-
 
 </body>
 

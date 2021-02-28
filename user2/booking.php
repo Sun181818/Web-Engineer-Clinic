@@ -61,11 +61,11 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
           </a>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
-                <button class="btn btn-info" type="button">
+                <button class="btn btn-info" type="submit">
                   <i class="fas fa-search fa-sm"></i>
                 </button>
               </div>
@@ -85,7 +85,10 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
             <li class="nav-item">
               <a class="nav-link" href="booking.php">Booking</a>
             </li>
-            
+            <li class="nav-item">
+              <a class="nav-link" href="professor_reg.php">Regsiter Professor</a>
+            </li>
+
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -264,19 +267,19 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
 
                                     <div class="form-group">
                                       <label for="detail">Detail</label>
-                                      <textarea class="form-control" name="detail" rows="3"required></textarea>
+                                      <textarea class="form-control" name="detail" rows="3" required></textarea>
                                     </div>
 
                                     <div class="form-group">
-                                    <label for="date">Date & Time</label>
-                                    <div class="form-row">
-                                      <div class="col">
-                                        <input type="date" class="form-control" name="date" required>
+                                      <label for="date">Date & Time</label>
+                                      <div class="form-row">
+                                        <div class="col">
+                                          <input type="date" class="form-control" name="date" required>
+                                        </div>
+                                        <div class="col">
+                                          <input type="time" class="form-control" name="time" required>
+                                        </div>
                                       </div>
-                                      <div class="col">
-                                        <input type="time" class="form-control" name="time" required>
-                                      </div>
-                                    </div>
                                     </div>
 
                                     <div class="form-group">
