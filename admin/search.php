@@ -13,8 +13,11 @@ if ($connect->connect_error) {
     die("Connection failed: " . $connect->connect_error);
 }
 
-$result = mysqli_query($connect, "select * from professor where expert like '%$search%' or professor_name like '%$search%'or position like '%$search%' or email like '%$search%' or title like '%$search%'");
-$result2 = mysqli_query($connect, "select * from user where user_name like '%$search%' or email like '%$search%'");
+//$result = mysqli_query($connect, "select * from professor where expert like '%$search%' or professor_name like '%$search%'or position like '%$search%' or email like '%$search%' or title like '%$search%'");
+//$result2 = mysqli_query($connect, "select * from user where user_name like '%$search%' or email like '%$search%'");
+
+$result = mysqli_query($connect, "select * from user where expert like '%$search%' and level like 'p' or user_name like '%$search%' and level like 'p' or position like '%$search%' and level like 'p' or email like '%$search%' and level like 'p' or title like '%$search%' and level like 'p'");
+$result2 = mysqli_query($connect, "select * from user where user_name like '%$search%' and level like 'u' or email like '%$search%' and level like 'u'");
 
 $connect->close();
 ?>
@@ -85,16 +88,17 @@ $connect->close();
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="monitor.php">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Monitor</span></a>
+                <a class="nav-link" href="aWebboard.php">
+                    <i class="fas fa-newspaper"></i>
+                    <span>Webboard</span></a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="history.php">
-                    <i class="fas fa-history"></i>
-                    <span>History</span></a>
+                <a class="nav-link" href="approve_professor.php">
+                    <i class="fas fa-user-check"></i>
+                    <span>Approve</span></a>
             </li>
+
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -213,7 +217,7 @@ $connect->close();
                                     <table class="table table-bordered" id="professorsearchTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>PID</th>
+                                                <th>ID</th>
                                                 <th>Title</th>
                                                 <th>Name</th>
                                                 <th>Expert</th>
@@ -225,9 +229,9 @@ $connect->close();
                                         <tbody>
                                             <?php while ($row = mysqli_fetch_array($result)) : ?>
                                                 <tr>
-                                                    <td><?php echo $row['pid']; ?></td>
+                                                    <td><?php echo $row['uid']; ?></td>
                                                     <td><?php echo $row['title']; ?></td>
-                                                    <td><?php echo $row['professor_name']; ?></td>
+                                                    <td><?php echo $row['user_name']; ?></td>
                                                     <td><?php echo $row['expert']; ?></td>
                                                     <td><?php echo $row['position']; ?></td>
                                                     <td><?php echo $row['office']; ?></td>
@@ -257,7 +261,7 @@ $connect->close();
                                     <table class="table table-bordered" id="usersearchTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>UID</th>
+                                                <th>ID</th>
                                                 <th>Username</th>
                                                 <th>Email</th>
                                             </tr>

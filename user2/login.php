@@ -54,7 +54,7 @@
                       </div>
                     </div> -->
                     <div class="form-group">
-                      <input type="submit" name = "btn_login"class="btn btn-info btn-user btn-block" value = "login">
+                      <input type="submit" name = "btn_login"class="btn btn-info btn-user btn-block" value = "Login">
                     </div>
                     <!-- <a href="index.php" class="btn btn-primary btn-user btn-block">
                       Login

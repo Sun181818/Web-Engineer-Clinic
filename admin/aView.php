@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 }
 
 //question
-$sql = "SELECT * FROM questions WHERE id='{$_GET['id']}' ";
+$sql = "SELECT * FROM webboard WHERE id='{$_GET['id']}' ";
 $query = mysqli_query($connect, $sql);
 $result = mysqli_fetch_assoc($query);
 
@@ -17,7 +17,7 @@ $query_a = mysqli_query($connect, $sql_a);
 $rows_a = mysqli_num_rows($query_a);
 
 // update view
-$sql_u = "UPDATE questions SET view=view+1 WHERE id='{$_GET['id']}' ";
+$sql_u = "UPDATE webboard SET view=view+1 WHERE id='{$_GET['id']}' ";
 mysqli_query($connect, $sql_u);
 ?>
 <!DOCTYPE html>

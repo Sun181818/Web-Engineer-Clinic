@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM booking");
+$result = mysqli_query($connect, "SELECT * FROM booking ");
 
 ?>
 <!DOCTYPE html>
@@ -48,11 +48,6 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
         <!-- Topbar -->
         <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
 
-          <!-- Sidebar Toggle (Topbar) -->
-          <!-- <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
-            <i class="fa fa-bars"></i>
-          </button> -->
-
           <a class="sidebar-brand d-flex align-items-center justify-content-center text-info" href="index.php">
             <div class="sidebar-brand-icon rotate-n-15 text-info">
               <i class="fas fa-cogs"></i>
@@ -61,23 +56,25 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
           </a>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
               <div class="input-group-append">
-                <button class="btn btn-info" type="button">
+                <button class="btn btn-info" type="submit">
                   <i class="fas fa-search fa-sm"></i>
                 </button>
               </div>
             </div>
           </form>
 
-
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
             <li class="nav-item active">
-              <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-link" href="index.php">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="professor.php">Professor</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="webboard.php">Webboard</a>
@@ -85,7 +82,16 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
             <li class="nav-item">
               <a class="nav-link" href="booking.php">Booking</a>
             </li>
-            
+
+            <?php
+                      if($_SESSION['level'] == 'u'){
+                        echo '<li class="nav-item">
+                              <a class="nav-link" href="professor_reg.php">Reg Prof</a>
+                              </li>';
+                      }
+            ?>
+
+
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
               <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -109,15 +115,31 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img class="img-profile rounded-circle" src="../img/profile.jpg">
+                <?php
+                      if($_SESSION['level'] == 'p'){
+                        echo '<img src="data:image/jpeg;base64,'.base64_encode($_SESSION['picture'] ).'" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
+                      }
+                      else{
+                        echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
+                      }
+                ?>
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                  <?php if (isset($_SESSION['email'])) { ?>
-                  <?php echo $_SESSION['email'];
+                  <?php if (isset($_SESSION['email'])) {
+                                echo $_SESSION['email'];
                   } ?>
                 </span>
               </a>
+              
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <?php
+                      if($_SESSION['level'] == 'p'){?>
+                        <a class="dropdown-item" href="profile.php">
+                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                            Profile
+                        </a><?php
+                      }
+                ?>
                 <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
@@ -152,6 +174,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
                 <h6 class="dropdown-header bg-info">
                   Notifications
                 </h6>
+
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-info">
@@ -159,10 +182,11 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
                     </div>
                   </div>
                   <div>
-                    <span class="font-weight-bold">New booking request BID 003 !</span>
+                    <span class="font-weight-bold">It's almost time for an subject ... !</span>
                     <div class="small text-gray-500">December 12, 2020</div>
                   </div>
                 </a>
+
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-success">
@@ -170,10 +194,23 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
                     </div>
                   </div>
                   <div>
-                    <span class="font-weight-bold">New booking request BID 004 !</span>
+                    <span class="font-weight-bold">Cancel booking from ...!</span>
                     <div class="small text-gray-500">December 7, 2020</div>
                   </div>
                 </a>
+
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Successfully booking subject ... !</span>
+                    <div class="small text-gray-500">December 7, 2020</div>
+                  </div>
+                </a>
+
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
             </li>
@@ -188,94 +225,303 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
         <!-- Begin Page Content -->
         <div class="container-fluid">
 
-          <!-- Page Heading -->
+          <!-- Outer Row -->
+          <div class="row justify-content-center">
 
-          <div class="row">
+            <div class="col-xl-8 col-lg-12 col-md-9">
 
-            <div class="col-lg-12">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
 
-              <!-- Brand Buttons -->
-              <?php while ($row = mysqli_fetch_array($result)):
-                if($row['status'] == "0"){?>
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
-                        <p class="m-0 text-info" ><?php echo $row['user_name'] ?></p>
-                        </div>
-                        <div class="card-body">
-                        <p>To Prof. : <?php echo $row['professor_name'] ?> </p>
-                        <div class="my-2"></div>
-                        <p>Detail : <?php echo $row['detail'] ?> </p>
-                        <div class="my-2"></div>
-                        <p>Date   : <?php echo $row['date'] ?> </p>
-                        <div class="my-2"></div>
-                        <p>Time   : <?php echo $row['time'] ?></p>
-                        <div class="my-2"></div>
-                        </div>
-                    </div>
-              <?php } endwhile; ?>
-
-                </div>
+              <div class="container">
+                  <div class="row">
+                      <div class="col-lg-9">
+                          <div class="box shadow-sm rounded bg-white mb-3">
+                              <div class="box-title border-bottom p-3">
+                                  <h6 class="m-0">Recent</h6>
+                              </div>
+                              <div class="box-body p-0">
+                                  <div class="p-3 d-flex align-items-center bg-light border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" />
+                                      </div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="text-truncate">DAILY RUNDOWN: WEDNESDAY</div>
+                                          <div class="small">Income tax sops on the cards, The bias in VC funding, and other top news for you</div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">3d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center osahan-post-header">
+                                      <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
+                                      </div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="mb-2">We found a job at askbootstrap Ltd that you may be interested in Vivamus imperdiet venenatis est...</div>
+                                          <button type="button" class="btn btn-outline-success btn-sm">View Jobs</button>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">4d</div>
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="box shadow-sm rounded bg-white mb-3">
+                              <div class="box-title border-bottom p-3">
+                                  <h6 class="m-0">Earlier</h6>
+                              </div>
+                              <div class="box-body p-0">
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3 d-flex align-items-center bg-danger justify-content-center rounded-circle text-white">DRM</div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="text-truncate">DAILY RUNDOWN: MONDAY</div>
+                                          <div class="small">Nunc purus metus, aliquam vitae venenatis sit amet, porta non est.</div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right" style="">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">3d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="text-truncate">DAILY RUNDOWN: SATURDAY</div>
+                                          <div class="small">Pellentesque semper ex diam, at tristique ipsum varius sed. Pellentesque non metus ullamcorper</div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">3d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" />
+                                      </div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="mb-2"><span class="font-weight-normal">Congratulate Gurdeep Singh Osahan (iamgurdeeposahan)</span> for 5 years at Askbootsrap Pvt.</div>
+                                          <button type="button" class="btn btn-outline-success btn-sm">Say congrats</button>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">4d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar4.png" alt="" />
+                                      </div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div>
+                                              <span class="font-weight-normal">Congratulate Mnadeep singh (iamgurdeeposahan)</span> for 4 years at Askbootsrap Pvt.
+                                              <div class="small text-success"><i class="fa fa-check-circle"></i> You sent Mandeep a message</div>
+                                          </div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">4d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3 d-flex align-items-center bg-success justify-content-center rounded-circle text-white">M</div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="text-truncate">DAILY RUNDOWN: MONDAY</div>
+                                          <div class="small">Nunc purus metus, aliquam vitae venenatis sit amet, porta non est.</div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">3d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3"><img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" /></div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="text-truncate">DAILY RUNDOWN: SATURDAY</div>
+                                          <div class="small">Pellentesque semper ex diam, at tristique ipsum varius sed. Pellentesque non metus ullamcorper</div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">3d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
+                                      <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="" />
+                                      </div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div class="mb-2"><span class="font-weight-normal">Congratulate Gurdeep Singh Osahan (iamgurdeeposahan)</span> for 5 years at Askbootsrap Pvt.</div>
+                                          <button type="button" class="btn btn-outline-success btn-sm">Say congrats</button>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">4d</div>
+                                      </span>
+                                  </div>
+                                  <div class="p-3 d-flex align-items-center osahan-post-header">
+                                      <div class="dropdown-list-image mr-3">
+                                          <img class="rounded-circle" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="" />
+                                      </div>
+                                      <div class="font-weight-bold mr-3">
+                                          <div>
+                                              <span class="font-weight-normal">Congratulate Mnadeep singh (iamgurdeeposahan)</span> for 4 years at Askbootsrap Pvt.
+                                              <div class="small text-success"><i class="fa fa-check-circle"></i> You sent Mandeep a message</div>
+                                          </div>
+                                      </div>
+                                      <span class="ml-auto mb-auto">
+                                          <div class="btn-group">
+                                              <button type="button" class="btn btn-light btn-sm rounded" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                  <i class="mdi mdi-dots-vertical"></i>
+                                              </button>
+                                              <div class="dropdown-menu dropdown-menu-right">
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-delete"></i> Delete</button>
+                                                  <button class="dropdown-item" type="button"><i class="mdi mdi-close"></i> Turn Off</button>
+                                              </div>
+                                          </div>
+                                          <br />
+                                          <div class="text-right text-muted pt-1">4d</div>
+                                      </span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
 
             </div>
 
-
           </div>
 
         </div>
-        <!-- /.container-fluid -->
+        <!-- End of Main Content -->
 
       </div>
-
-      <!-- End of Main Content -->
+      <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+    <!-- End of Page Wrapper -->
 
-  </div>
-  <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Bootstrap core JavaScript-->
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Core plugin JavaScript-->
-  <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  <!-- Custom scripts for all pages-->
-  <script src="../js/Engineer-Clinic.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="../js/Engineer-Clinic.min.js"></script>
 
-  <!-- Page level plugins -->
-  <script src="../vendor/chart.js/Chart.min.js"></script>
+    <!-- Page level plugins -->
+    <script src="../vendor/chart.js/Chart.min.js"></script>
 
-  <!-- Page level custom scripts -->
-  <script src="../js/demo/chart-area-demo.js"></script>
-  <script src="../js/demo/chart-pie-demo.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script>
 
 </body>
 

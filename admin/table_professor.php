@@ -8,7 +8,7 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM professor");
+$result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '1'");
 ?>
 
 <!DOCTYPE html>
@@ -88,17 +88,6 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
           <span>Approve</span></a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="monitor.php">
-          <i class="fas fa-chart-line"></i>
-          <span>Monitor</span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="history.php">
-          <i class="fas fa-history"></i>
-          <span>History</span></a>
-      </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -216,33 +205,38 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
+                      <th>Picture</th>
                       <th>PID</th>
+                      <th>UID</th>
                       <th>Title</th>
-                      <th>Name</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
                       <th>Expert</th>
                       <th>Position</th>
                       <th>Office</th>
-                      <th>Email</th>
+                      <!-- <th>Email</th> -->
                     </tr>
                   </thead>
                   <tbody>
                     <?php while ($row = mysqli_fetch_array($result)) : ?>
                       <tr>
+                        <td><?php echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"  class= "img-profile rounded-circle" height="50px" width="50px"/>'; ?></td>
                         <td><?php echo $row['pid']; ?></td>
+                        <td><?php echo $row['user_id']; ?></td>
                         <td><?php echo $row['title']; ?></td>
-                        <td><?php echo $row['professor_name']; ?></td>
+                        <td><?php echo $row['firstname']; ?></td>
+                        <td><?php echo $row['lastname']; ?></td>
                         <td><?php echo $row['expert']; ?></td>
                         <td><?php echo $row['position']; ?></td>
                         <td><?php echo $row['office']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
 
                         <!-- edit -->
-                        <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
-                          <div class="modal fade" id="update_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                        <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_professor_Modal<?php echo $row['user_id']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
+                          <div class="modal fade" id="update_professor_Modal<?php echo $row['user_id']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_professor_ModalLabel<?php echo $row['uid']; ?>" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="update_professor_ModalLabel<?php echo $row['pid']; ?>">Edit</h5>
+                                  <h5 class="modal-title" id="update_professor_ModalLabel<?php echo $row['user_id']; ?>">Edit</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
@@ -254,8 +248,8 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                                       <input type="text" class="form-control" name="title" value="<?php echo $row['title']; ?>">
                                     </div>
                                     <div class="form-group">
-                                      <label for="professor_name" class="col-form-label">Name:</label>
-                                      <input type="text" class="form-control" name="professor_name" value="<?php echo $row['professor_name']; ?>">
+                                      <label for="user_name" class="col-form-label">Name:</label>
+                                      <input type="text" class="form-control" name="user_name" value="<?php echo $row['user_name']; ?>">
                                     </div>
                                     <div class="form-group">
                                       <label for="expert" class="col-form-label">Expert:</label>
@@ -276,7 +270,7 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <input type="hidden" name="pid" value="<?php echo $row['pid']; ?>">
+                                    <input type="hidden" name="uid" value="<?php echo $row['user_id']; ?>">
                                     <button type="submit" class="btn btn-primary">Save</button>
                                   </div>
                                 </form>
@@ -284,26 +278,27 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                             </div>
                           </div>
                         </td>
+                        
 
 
                         <!-- delete -->
-                        <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_professor_Modal<?php echo $row['pid']; ?>">
+                        <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_professor_Modal<?php echo $row['uid']; ?>">
                             <i class="fas fa-trash"></i>
                           </button>
 
-                          <div class="modal fade" id="delete_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                          <div class="modal fade" id="delete_professor_Modal<?php echo $row['uid']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_professor_ModalLabel<?php echo $row['uid']; ?>" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="delete_professor_ModalLabel<?php echo $row['pid']; ?>">Are you sure to delete?</h5>
+                                  <h5 class="modal-title" id="delete_professor_ModalLabel<?php echo $row['uid']; ?>">Are you sure to delete?</h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                   </button>
                                 </div>
                                 <div class="modal-body">
-                                  <p>PID : <?php echo $row['pid']; ?></p>
+                                  <p>ID : <?php echo $row['uid']; ?></p>
                                   <p>Title : <?php echo $row['title']; ?></p>
-                                  <p>Profess_name : <?php echo $row['professor_name']; ?></p>
+                                  <p>Profess_name : <?php echo $row['user_name']; ?></p>
                                   <p>Expert : <?php echo $row['expert']; ?></p>
                                   <p>Position : <?php echo $row['position']; ?></p>
                                   <p>Office : <?php echo $row['office']; ?></p>
@@ -311,9 +306,13 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                  <a href="delete_process.php?pid=<?php echo $row['pid']; ?>" class="btn btn-primary">
+                                  <form action="delete_process.php" method="post">
+                                  <input type="hidden" name="uid" value="<?php echo $row['uid']; ?>">
+                                  <button type="submit" class="btn btn-primary">Confirm</button>
+                                  </form>
+                                  <!-- <a href="delete_process.php?uid=<?php echo $row['uid']; ?>" class="btn btn-primary">
                                     Confirm
-                                  </a>
+                                  </a> -->
                                 </div>
                               </div>
                             </div>
@@ -337,13 +336,22 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                               <form action="add_process.php" method="post">
                                 <div class="modal-body">
 
+                                <div class="form-group">
+                                    <label for="email" class="col-form-label">Email:</label>
+                                    <input type="text" class="form-control" name="email">
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="password" class="col-form-label">Password:</label>
+                                    <input type="password" class="form-control" name="password">
+                                  </div>
+
                                   <div class="form-group">
                                     <label for="title" class="col-form-label">Title:</label>
                                     <input type="text" class="form-control" name="title">
                                   </div>
                                   <div class="form-group">
-                                    <label for="professor_name" class="col-form-label">Name:</label>
-                                    <input type="text" class="form-control" name="professor_name">
+                                    <label for="user_name" class="col-form-label">Name:</label>
+                                    <input type="text" class="form-control" name="user_name">
                                   </div>
                                   <div class="form-group">
                                     <label for="expert" class="col-form-label">Expert:</label>
@@ -357,10 +365,7 @@ $result = mysqli_query($connect, "SELECT * FROM professor");
                                     <label for="office" class="col-form-label">Office:</label>
                                     <input type="text" class="form-control" name="office">
                                   </div>
-                                  <div class="form-group">
-                                    <label for="email" class="col-form-label">Email:</label>
-                                    <input type="text" class="form-control" name="email">
-                                  </div>
+
                                 </div>
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

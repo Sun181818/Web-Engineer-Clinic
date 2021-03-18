@@ -4,13 +4,15 @@
 
     //print_r($_POST['title']);
     $title = $_POST['title'];
-    $professor_name = $_POST['professor_name'];
+    $user_name = $_POST['user_name'];
     $expert = $_POST['expert'];
     $position = $_POST['position'];
     $office = $_POST['office'];
     $email = $_POST['email'];
+    $password = md5($_POST['password']);
+    $level = 'p';
 
-    $q = "INSERT INTO professor (title, professor_name, expert, position, office, email) VALUES ('$title', '$professor_name', '$expert', '$position', '$office', '$email')";
+    $q = "INSERT INTO user (title, user_name, password, expert, position, office, email, level) VALUES ('$title', '$user_name','$password', '$expert', '$position', '$office', '$email','$level')";
 
     $result = mysqli_query($connect, $q );
 

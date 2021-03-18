@@ -6,11 +6,8 @@ if (!isset($_SESSION['email'])) {
 }
 
 include '../connectdb.php';
-$varUID = $_SESSION['uid'];
 $varEmail = $_SESSION['email'];
-
-$result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
-
+$result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
 
 ?>
 <!DOCTYPE html>
@@ -95,8 +92,8 @@ $result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
             <?php
             if ($_SESSION['level'] == 'u') {
               echo '<li class="nav-item">
-                              <a class="nav-link" href="professor_reg.php">Reg Prof</a>
-                              </li>';
+                <a class="nav-link" href="professor_reg.php">Reg Prof</a>
+                </li>';
             }
             ?>
 
@@ -216,111 +213,120 @@ $result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
 
         <!-- Begin Page Content -->
         <div class="container-fluid" style="min-height: 100vh;">
-
           <!-- Outer Row -->
           <div class="row justify-content-center">
 
+            <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
             <div class="col-xl-8 col-lg-12 col-md-9">
+              <!-- DataProfressor  -->
+              <div class="card shadow mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="main-box no-header clearfix">
+                        <div class="main-box-body clearfix">
+                          <div class="table-responsive">
+                            <table class="table user-list">
+                              <thead>
+                                <tr>
+                                  <th><span></span></th>
+                                  <th><span>Professor</span></th>
+                                  <th class="text-center"><span>Expert</span></th>
+                                  <th class="text-center"><span>Position</span></th>
+                                  <!-- <th class="text-center"><span>Office</span></th> -->
+                                  <th>&nbsp;</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <?php while ($row = mysqli_fetch_array($result)) : ?>
+                                  <tr>
+                                    <td>
+                                      <?php echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"  class="rounded" height="50px" width="50px"/>'; ?>
+                                    </td>
+                                    <td><a href="#" class="user-link"><?php echo "       " . $row['title'] . " " . $row['firstname'] . " " . $row['lastname']; ?></a></td>
+                                    <td class="text-center"><?php echo $row['expert']; ?></td>
+                                    <td class="text-center"><?php echo $row['position']; ?></td>
+                                    <!-- <td class="text-center"><?php echo $row['office']; ?></td> -->
 
-              <div class="container">
-                <div class="row">
-                  <div class="col-md-12">
-                    <?php
-                    if ($_SESSION['level'] == 'u') {
-                      while ($row = mysqli_fetch_array($result)) :
+                                    <td style="width: 20%;">
+                                      <!-- Book -->
+                                      <button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#booking_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-calendar-check"></i></button>
+                                      <div class="modal fade" id="booking_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="booking_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="booking_professor_ModalLabel<?php echo $row['pid']; ?>">Booking</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <form action="booking_process.php" method="post">
+                                              <div class="modal-body">
 
-                    ?>
-                        <div class="card card-white mb-5 shadow">
-                          <div class="card-body">
-                            <ul class="list-unstyled">
-                              <li class="position-relative booking">
-                                <div class="media">
-                                  <?php
-                                  $dbpid = $row['pid'];
-                                  $dbprof = mysqli_query($connect, "SELECT * FROM professor WHERE pid = '$dbpid'");
-                                  while ($prof = mysqli_fetch_array($dbprof)) :
-                                  ?>
-                                    <div class="msg-img">
-                                      <?php
-                                      echo '<img src="data:image/jpeg;base64,' . base64_encode($prof['picture']) . '" class= "img-profile rounded-circle" height="150px" width="150px" class="img-thumnail" />';
-                                      ?>
-                                    </div>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <div class="media-body">
-                                      <h5 class="mb-4">
-                                      <?php
-                                        echo "Subject: " . $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'];
-                                        endwhile;
-                                      ?>
-                                      <?php if ($row['status'] == '2') { ?>
-                                        <span class="badge badge-success mx-3">success</span>
-                                      <?php } else if ($row['status'] == '1') { ?>
-                                        <span class="badge badge-danger mx-3">Reject</span>
-                                      <?php } else if ($row['status'] == '0') { ?>
-                                        <span class="badge badge-info mx-3">Pending</span>
-                                      <?php } ?>
-                                      </h5>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Date:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['date']; ?></span>
-                                      </div>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Time:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['time']; ?></span>
-                                      </div>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Subject:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['subject']; ?></span>
-                                      </div>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Details:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['detail']; ?></span>
-                                      </div>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Created:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['created_at']; ?></span>
-                                      </div>
+                                                <div class="form-group">
+                                                  <div class="text-center">
+                                                    <p><?php echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '" class="rounded" height="100px" width="100px"/>'; ?></p>
+                                                  </div>
+                                                  <label for="professor">Professor Name</label>
+                                                  <input type="text" class="form-control" value="<?php echo $row['title'] . " " . $row['firstname'] . "   " . $row['lastname']; ?>" disabled>
+                                                </div>
+                                                <div class="form-group">
+                                                  <label for="office">Office</label>
+                                                  <input type="text" class="form-control" name="office" value="<?php echo $row['office']; ?>" disabled>
+                                                </div>
 
-                                      <!-- <div class="mb-5">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-1 mb-sm-0">Clients:</span>
-                                        <span class="border-right pr-2 mr-2">John Inoue</span>
-                                        <span class="border-right pr-2 mr-2"> john@example.com</span>
-                                        <span>123-563-789</span>
-                                    </div> -->
-                                      <!-- <a href="#" class="btn-gray">Send Message</a> -->
-                                    </div>
-                                </div>
-                                <!-- <div class="buttons-to-right">
-                                <a href="#" class="btn-gray mr-2"><i class="far fa-times-circle mr-2"></i> Reject</a>
-                                <a href="#" class="btn-gray"><i class="far fa-check-circle mr-2"></i> Approve</a>
-                            </div> -->
-                              </li>
+                                                <div class="form-group">
+                                                  <label for="subject">Subject</label>
+                                                  <input type="text" class="form-control" name="subject" required>
+                                                </div>
 
-                            </ul>
+                                                <div class="form-group">
+                                                  <label for="detail">Detail</label>
+                                                  <textarea class="form-control" name="detail" rows="3" required></textarea>
+                                                </div>
 
+                                                <div class="form-group">
+                                                  <label for="date">Date & Time</label>
+                                                  <div class="form-row">
+                                                    <div class="col">
+                                                      <input type="date" class="form-control" name="date" required>
+                                                    </div>
+                                                    <div class="col">
+                                                      <input type="time" class="form-control" name="time" required>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <input type="hidden" name="uid" value="<?php echo $_SESSION['uid']; ?>">
+                                                <input type="hidden" name="pid" value="<?php echo $row['pid']; ?>">
+
+
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                <button type="submit" class="btn btn-primary">Confirm</button>
+                                              </div>
+                                            </form>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                <?php endwhile; ?>
+                              </tbody>
+                            </table>
                           </div>
                         </div>
-                      <?php endwhile;
-                    }
-                    if ($_SESSION['level'] == 'p') {
-                      while ($row = mysqli_fetch_array($result)) : ?>
-
-
-
-
-                    <?php endwhile;
-                    } ?>
-
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-
             </div>
-
           </div>
 
+
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.container-flpid -->
 
       </div>
 

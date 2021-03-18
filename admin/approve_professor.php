@@ -1,45 +1,5 @@
 <?php include '../connectdb.php';
 
-    // // //print_r($_POST['title']);
-    // $rid = $_POST['rid'];
-    // $status = $_POST['status'];
-
-    // $q = "UPDATE request SET status = '$status' WHERE rid = '$rid'";
-
-
-    // $result = mysqli_query($connect, $q );
-
-    // if($result) {
-    //     header("Location: index.php");
-    //     //echo "Success";
-    // }
-    // else {
-    //     echo "Fail" . mysqli_error($connect);
-    // }
-
-    // mysqli_close($connect);
-
-    // if(isset($_POST['submit2'])) {
-
-    //   $title = $_POST['title'];
-    //   $expert = $_POST['expert'];
-    //   $position = $_POST['position'];
-    //   $office = $_POST['office'];
-    //   $email = $_SESSION['email'];
-
-    //   $query = "UPDATE user SET title = '$title', expert = '$expert', position = '$position', office = '$office' WHERE email = '$email'";
-    //   $result = mysqli_query($connect,$query);
-
-    //       if($result) {
-    //           $_SESSION['success'] = "Insert user successfully";
-    //           header("location: index.php");
-    //       }
-    //       else{
-    //           $_SESSION['error'] = "Someting went wrong";
-    //           header("location: index.php");
-    //       }
-
-    // }
 ?>
 
 <?php
@@ -51,7 +11,7 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM request ");
+$result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '0'");
 
 ?>
 
@@ -123,16 +83,17 @@ $result = mysqli_query($connect, "SELECT * FROM request ");
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="monitor.php">
-          <i class="fas fa-chart-line"></i>
-          <span>Monitor</span></a>
+        <a class="nav-link" href="aWebboard.php">
+          <i class="fas fa-newspaper"></i>
+          <span>Webboard</span></a>
       </li>
 
       <li class="nav-item">
-        <a class="nav-link" href="history.php">
-          <i class="fas fa-history"></i>
-          <span>History</span></a>
+        <a class="nav-link" href="approve_professor.php">
+          <i class="fas fa-user-check"></i>
+          <span>Approve</span></a>
       </li>
+
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -245,16 +206,20 @@ $result = mysqli_query($connect, "SELECT * FROM request ");
 
               <!-- Brand Buttons -->
               <?php while ($row = mysqli_fetch_array($result)) :
-                if ($row['status'] == "0") { ?>
+                if ($row['status'] == "0") {
+              ?>
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['rid'] . ")" . $row['date'] ?></h6>
-                      <!-- <p class="m-0 text-info"><?php echo $row['email'] ?></p> -->
+                      <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['pid'] . ")" . $row['created_at'] ?></h6>
                     </div>
                     <div class="card-body">
-                      <p>Email : <?php echo $row['email'] ?> </p>
+                      <p>UID : <?php echo $row['user_id'] ?> </p>
                       <div class="my-2"></div>
                       <p>Title : <?php echo $row['title'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Firstname : <?php echo $row['firstname'] ?> </p>
+                      <div class="my-2"></div>
+                      <p>Lastname : <?php echo $row['lastname'] ?> </p>
                       <div class="my-2"></div>
                       <p>Expert : <?php echo $row['expert'] ?> </p>
                       <div class="my-2"></div>
@@ -262,14 +227,22 @@ $result = mysqli_query($connect, "SELECT * FROM request ");
                       <div class="my-2"></div>
                       <p>Office : <?php echo $row['office'] ?></p>
                       <div class="my-2"></div>
-                      <p>Status : <?php echo $row['status'] ?></p>
+                      <!-- <p>Status : <?php echo $row['status'] ?></p> -->
+                      <div class="my-2"></div>
+                      <p>Picture:</br><?php echo '
+                         <tr>
+                              <td>
+                                   <img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '" height="auto" width="10%" class="img-thumnail" />
+                              </td>
+                         </tr>
+                    '; ?></p>
                       <div class="my-2"></div>
 
                       <form action="approve2.php" method="post">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" name="status" value="1">
+                          <input type="hidden" class="form-control" name="status" value="-1">
                         </div>
-                        <input type="hidden" name="rid" value="<?php echo $row['rid']; ?>">
+                        <input type="hidden" name="pid" value="<?php echo $row['pid']; ?>">
                         <button type="submit1" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
                             <i class="fas fa-trash">
                               <span class="text">Reject</span></i>
@@ -278,14 +251,10 @@ $result = mysqli_query($connect, "SELECT * FROM request ");
 
                       <form action="approve2.php" method="post">
                         <div class="form-group">
-                          <input type="hidden" class="form-control" name="status" value="2">
+                          <input type="hidden" class="form-control" name="status" value="1">
+                          <input type="hidden" name="uid" value="<?php echo $row['user_id']; ?>">
+                          <input type="hidden" name="pid" value="<?php echo $row['pid']; ?>">
                         </div>
-                        <input type="hidden" name="rid" value="<?php echo $row['rid']; ?>">
-                        <input type="hidden" name="email" value="<?php echo $row['email']; ?>">
-                        <input type="hidden" name="title" value="<?php echo $row['title']; ?>">
-                        <input type="hidden" name="expert" value="<?php echo $row['expert']; ?>">
-                        <input type="hidden" name="position" value="<?php echo $row['position']; ?>">
-                        <input type="hidden" name="office" value="<?php echo $row['office']; ?>">
                         <button type="submit2" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
                             <i class="fas fa-check">
                               <span class="text">Accept</span></i>
@@ -361,3 +330,22 @@ $result = mysqli_query($connect, "SELECT * FROM request ");
 </body>
 
 </html>
+
+<script>
+  $(document).ready(function() {
+    $('#insert').click(function() {
+      var image_name = $('#image').val();
+      if (image_name == '') {
+        alert("Please Select Image");
+        return false;
+      } else {
+        var extension = $('#image').val().split('.').pop().toLowerCase();
+        if (jQuery.inArray(extension, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+          alert('Invalid Image File');
+          $('#image').val('');
+          return false;
+        }
+      }
+    });
+  });
+</script>

@@ -88,17 +88,6 @@ $result = mysqli_query($connect, "SELECT * FROM user");
           <span>Approve</span></a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="monitor.php">
-          <i class="fas fa-chart-line"></i>
-          <span>Monitor</span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="history.php">
-          <i class="fas fa-history"></i>
-          <span>History</span></a>
-      </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">

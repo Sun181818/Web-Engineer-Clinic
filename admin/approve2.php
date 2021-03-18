@@ -1,41 +1,25 @@
 <?php include '../connectdb.php';
-    //require 'connectdb.php'?>
-<?php
 
     //print_r($_POST['title']);
-    $rid = $_POST['rid'];
+    $pid = $_POST['pid'];
+    $uid = $_POST['uid'];
     $status = $_POST['status'];
 
-    $q = "UPDATE request SET status = '$status' WHERE rid = '$rid'";
-
-
+    $q = "UPDATE professor SET status = '$status' WHERE pid = '$pid'";
     $result = mysqli_query($connect, $q );
 
-    if($status == '2') {
+    $q = "UPDATE user SET level = 'p' WHERE uid = '$uid'";
+    $result = mysqli_query($connect, $q );
 
-        $title = $_POST['title'];
-        $expert = $_POST['expert'];
-        $position = $_POST['position'];
-        $office = $_POST['office'];
-        $email = $_POST['email'];
+    if($result) {
 
-        $query = "UPDATE user SET title = '$title', expert = '$expert', position = '$position', office = '$office',level = 'p' WHERE email = '$email'";
-        $result = mysqli_query($connect,$query);
-            if($result) {
-                $_SESSION['success'] = "Insert user successfully";
-                header("location: approve_professor.php");
-            }
-            else{
-                $_SESSION['error'] = "Someting went wrong";
-                header("location: approve_professor.php");
-            }
-      }
-    else {
-        echo "Fail" . mysqli_error($connect);
+        $_SESSION['success'] = "Insert user successfully";
+        header("location: approve_professor.php");
     }
-
-
-
+    else{
+        $_SESSION['error'] = "Someting went wrong";
+        header("location: approve_professor.php");
+    }
 
     mysqli_close($connect);
 ?>

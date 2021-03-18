@@ -2,14 +2,16 @@
     //require 'connectdb.php'?>
 <?php
 
-    //print_r($_POST['']);
-    $pid = $_GET['pid'];
+    //print_r($_POST['title']);
+    $uid = $_POST['uid'];
 
-    $q = "DELETE FROM professor WHERE pid = '$pid'";
+    $level = 'u';
 
-    $result = mysqli_query($connect, $q);
+    $q = "UPDATE user SET title = NULL, expert = NULL, position = NULL, office = NULL,level = '$level' WHERE uid = '$uid'";
 
-    if(mysqli_affected_rows($connect) > 0) {
+    $result = mysqli_query($connect, $q );
+
+    if($result) {
         header("Location: table_professor.php");
         //echo "Success";
     }

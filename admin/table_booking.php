@@ -88,18 +88,6 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
           <span>Approve</span></a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="monitor.php">
-          <i class="fas fa-chart-line"></i>
-          <span>Monitor</span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="history.php">
-          <i class="fas fa-history"></i>
-          <span>History</span></a>
-      </li>
-
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
 
@@ -216,33 +204,40 @@ $result = mysqli_query($connect, "SELECT * FROM booking");
                     <tr>
                       <th>BID</th>
                       <th>Subject</th>
-                      <th>U_Name</th>
-                      <th>P_Name</th>
+                      <th>User</th>
+                      <th>Professor</th>
                       <th>Date</th>
                       <th>Time</th>
                       <th>Status</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <?php while ($row = mysqli_fetch_array($result)) : ?>
-                      <tr>
-                        <td><?php echo $row['bid'] ?></td>
-                        <td><?php echo $row['subject'] ?></td>
-                        <td><?php echo $row['user_name'] ?></td>
-                        <td><?php echo $row['professor_name'] ?></td>
-                        <td><?php echo $row['date'] ?></td>
-                        <td><?php echo $row['time'] ?></td>
-                        <td><?php if ($row['status'] == "0") { ?>
-                            <span class="badge badge-warning">Waiting</span>
-                          <?php } else if ($row['status'] == "1") { ?>
-                            <span class="badge badge-danger">Rejected</span>
-                          <?php } else if ($row['status'] == "2") { ?>
-                            <span class="badge badge-success">Accepted</span>
-                          <?php } ?>
-                        </td>
-                      </tr>
-                    <?php endwhile; ?>
-                  </tbody>
+                  <?php while ($row = mysqli_fetch_array($result)) : ?>
+                    <tbody>
+                      <?php
+                      $dbpid = $row['pid'];
+                      $dbuid = $row['uid'];
+                      $dbprof = mysqli_query($connect, "SELECT * FROM professor WHERE pid = '$dbpid'");
+                      $dbuser = mysqli_query($connect, "SELECT * FROM user WHERE uid = '$dbuid'");
+                      while (($prof = mysqli_fetch_array($dbprof)) && ($user = mysqli_fetch_array($dbuser))) : ?>
+                        <tr>
+                          <td><?php echo $row['bid'] ?></td>
+                          <td><?php echo $row['subject'] ?></td>
+                          <td><?php echo $user['user_name'] ?></td>
+                          <td><?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'] ?></td>
+                          <td><?php echo $row['date'] ?></td>
+                          <td><?php echo $row['time'] ?></td>
+                          <td><?php if ($row['status'] == "0") { ?>
+                              <span class="badge badge-warning">Waiting</span>
+                            <?php } else if ($row['status'] == "1") { ?>
+                              <span class="badge badge-danger">Rejected</span>
+                            <?php } else if ($row['status'] == "2") { ?>
+                              <span class="badge badge-success">Accepted</span>
+                            <?php } ?>
+                          </td>
+                        </tr>
+                      <?php endwhile; ?>
+                    </tbody>
+                  <?php endwhile; ?>
                 </table>
               </div>
             </div>

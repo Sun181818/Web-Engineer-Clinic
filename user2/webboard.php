@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM questions ");
+$result = mysqli_query($connect, "SELECT * FROM webboard ");
 
 ?>
 <!DOCTYPE html>
@@ -79,14 +79,23 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                             <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="professor.php">Professor</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="webboard.php">Webboard</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="booking.php">Booking</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="professor_reg.php">Regsiter Professor</a>
-                        </li>
+
+                        <?php
+                        if ($_SESSION['level'] == 'u') {
+                            echo '<li class="nav-item">
+                                    <a class="nav-link" href="professor_reg.php">Reg Prof</a>
+                                    </li>';
+                        }
+                        ?>
+
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
                         <li class="nav-item dropdown no-arrow d-sm-none">
@@ -111,27 +120,41 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="img-profile rounded-circle" src="../img/profile.jpg">
+                                <?php
+                                if ($_SESSION['level'] == 'p') {
+                                    echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
+                                } else {
+                                    echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
+                                }
+                                ?>
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                                    <?php if (isset($_SESSION['email'])) { ?>
-                                    <?php echo $_SESSION['email'];
+                                    <?php if (isset($_SESSION['email'])) {
+                                        echo $_SESSION['email'];
                                     } ?>
                                 </span>
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <?php
+                                if ($_SESSION['level'] == 'p') { ?>
+                                    <a class="dropdown-item" href="profile.php">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a><?php
+                                    }
+                                        ?>
                                 <!-- <a class="dropdown-item" href="#">
-                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Profile
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Settings
-                  </a>
-                  <a class="dropdown-item" href="#">
-                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Activity Log
-                  </a> -->
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profile
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Settings
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Activity Log
+                                </a> -->
                                 <!-- <div class="dropdown-divider"></div> -->
                                 <a class="dropdown-item" href="logout.php">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -188,167 +211,43 @@ $result = mysqli_query($connect, "SELECT * FROM questions ");
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-
+                <div class="container-fluid" style="min-height: 100vh;">
                     <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
-                    </div>
+
                     <!-- Content Row -->
-                    <div class="row">
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Topic</th>
-                                            <th>Detail</th>
-                                            <th>Email</th>
-                                            <th>Date Post</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php while ($row = mysqli_fetch_array($result)) : ?>
-                                            <tr>
-                                                <td><?php echo $row['id']; ?></td>
-                                                <td><?php echo $row['topic']; ?></td>
-                                                <td><?php echo $row['detail']; ?></td>
-                                                <td><?php echo $row['email']; ?></td>
-                                                <td><?php echo $row['created']; ?></td>
-
-
-                                                <!-- edit --
-                                                <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_post_Modal<?php echo $row['id']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
-                                                    <div class="modal fade" id="update_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="update_post_ModalLabel<?php echo $row['id']; ?>">Edit</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form action="edit_post.php" method="post">
-                                                                    <div class="modal-body">
-                                                                        <div class="form-group">
-                                                                            <label for="topic" class="col-form-label">Topic:</label>
-                                                                            <input type="text" class="form-control" name="topic" value="<?php echo $row['topic']; ?>" required>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="detail" class="col-form-label">Detail:</label>
-                                                                            <input type="text" class="form-control" name="detail" value="<?php echo $row['detail']; ?>" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                                        <button type="submit" class="btn btn-info">Save</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-
-                                                 delete 
-                                                <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_post_Modal<?php echo $row['id']; ?>">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-
-                                                    <div class="modal fade" id="delete_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="delete_post_ModalLabel<?php echo $row['id']; ?>">Are you sure to delete?</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p>ID : <?php echo $row['id']; ?></p>
-                                                                    <p>Topic : <?php echo $row['topic']; ?></p>
-                                                                    <p>Detail : <?php echo $row['detail']; ?></p>
-                                                                    <p>Email : <?php echo $row['email']; ?></p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                    <a href="delete_post.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                                                                        Confirm
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>//-->
-
-                                                <!--view-->
-                                                <td>
-                                                    <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                                                        View
-                                                    </a>
-                                                </td>
-
-                                            <?php endwhile; ?>
-                                            <!--add topic-->
-                                            <tr>
-                                                <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
-
-                                                    <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form action="add_new_topic.php" method="post">
-                                                                    <div class="modal-body">
-
-                                                                        <div class="form-group">
-                                                                            <label for="topic" class="col-form-label">Topic:</label>
-                                                                            <input type="text" class="form-control" name="topic" required>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="detail" class="col-form-label">Detail:</label>
-                                                                            <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="pic" class="col-form-label">Picture:</label></br>
-                                                                            <form method="post" enctype="multipart/form-data">
-                                                                                <input type="file" name="image" id="image" />
-                                                                                <!--br />
-                                                                                <input type="submit" name="insert" id="insert" value="Insert" class="btn btn-info" /-->
-                                                                            </form>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <button type="submit" name="insert" id="insert" value="Insert" class="btn btn-info">Confirm</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div class="row justify-content-center">
+                        <div class="col-xl-8 col-lg-12 col-md-9">
+                                <?php while ($row = mysqli_fetch_array($result)) : ?>
+                                    <?php
+                                    $dbuid = $row['uid'];
+                                    $dbuser = mysqli_query($connect, "SELECT * FROM user Where uid = '$dbuid'");
+                                    while ($user = mysqli_fetch_array($dbuser)) : ?>
+                                        <div class="card shadow mb-2">
+                                            <div class="card-header py-3">
+                                                <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="m-0 font-weight-bold text-primary"><?php echo $row['topic']; ?></a>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="font-weight-bold">
+                                                    <div class="forum-sub-title"><?php echo $row['detail']; ?></div>
+                                                </div>
+                                                <hr>
+                                                        <?php
+                                                        if ($_SESSION['level'] == 'p') {
+                                                            echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle p-2 " height="auto" width="50px" class="img-thumnail" />';
+                                                        } else {
+                                                            echo '<img class="img-profile rounded-circle p-2" src="../img/profile.jpg" height="50px" width="50px" >';
+                                                        }
+                                                        ?>
+                                                        &nbsp;&nbsp;
+                                                        <?php echo $user['user_name']; ?>
+                                            </div>
+                                        </div>
+                                    <?php endwhile; ?>
+                                <?php endwhile; ?>
                         </div>
-
                         <!-- End of Main Content -->
-
                     </div>
                     <!-- End of Content Wrapper -->
-
                 </div>
                 <!-- End of Page Wrapper -->
 

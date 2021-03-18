@@ -1,61 +1,36 @@
 <?php
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['email'])) {
-        header("location: login.php");
-    }
+if (!isset($_SESSION['email'])) {
+  header("location: login.php");
+}
 
-    include '../connectdb.php';
+include '../connectdb.php';
 
-    if(isset($_POST['submit'])) {
+if (isset($_POST['submit'])) {
 
-      $title = $_POST['title'];
-      $expert = $_POST['expert'];
-      $position = $_POST['position'];
-      $office = $_POST['office'];
-      $email = $_SESSION['email'];
-      $status = "0";
-      $date = date('Y-m-d H:i:s');
+  $uid = $_SESSION['uid'];
+  $title = $_POST['title'];
+  $firstname = $_POST['firstname'];
+  $lastname = $_POST['lastname'];
+  $expert = $_POST['expert'];
+  $position = $_POST['position'];
+  $office = $_POST['office'];
+  $status = "0";
+  $created_at = date('Y-m-d H:i:s');
+  $picture = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
 
-      $query = "INSERT INTO request (title, expert, position, office, email, date, status) VALUES ('$title', '$expert', '$position', '$office', '$email' ,'$date','$status')";
-      $result = mysqli_query($connect,$query);
+  $query = "INSERT INTO professor (user_id, title, firstname, lastname, expert, position, office, picture, created_at, status ,updated_at) values ('$uid','$title','$firstname','$lastname','$expert','$position','$office','$picture','$created_at','$status','$created_at')";
+  $result = mysqli_query($connect, $query);
 
-          if($result) {
-              $_SESSION['success'] = "Insert user successfully";
-              header("location: index.php");
-          }
-          else{
-              $_SESSION['error'] = "Someting went wrong";
-              header("location: index.php");
-          }
-
-    }
-
-
-    // if(isset($_POST['submit'])) {
-
-    //   $title = $_POST['title'];
-    //   $expert = $_POST['expert'];
-    //   $position = $_POST['position'];
-    //   $office = $_POST['office'];
-    //   $email = $_SESSION['email'];
-      
-
-    //   $query = "UPDATE user SET title = '$title', expert = '$expert', position = '$position', office = '$office' WHERE email = '$email'";
-    //   $result = mysqli_query($connect,$query);
-
-    //       if($result) {
-    //           $_SESSION['success'] = "Insert user successfully";
-    //           header("location: index.php");
-    //       }
-    //       else{
-    //           $_SESSION['error'] = "Someting went wrong";
-    //           header("location: index.php");
-    //       }
-        
-
-    // }
-
+  if ($result) {
+    $_SESSION['success'] = "Insert user successfully";
+    header("location: index.php");
+  } else {
+    $_SESSION['error'] = "Someting went wrong";
+    header("location: index.php");
+  }
+}
 ?>
 
 <!DOCTYPE html>
@@ -103,17 +78,17 @@
 
           <a class="sidebar-brand d-flex align-items-center justify-content-center text-info" href="index.php">
             <div class="sidebar-brand-icon rotate-n-15 text-info">
-                <i class="fas fa-cogs"></i>
+              <i class="fas fa-cogs"></i>
             </div>
             <div class="sidebar-brand-text mx-3 text-info">Engineering Clinic</div>
           </a>
 
           <!-- Topbar Search -->
-          <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+          <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
               <div class="input-group-append">
-                <button class="btn btn-info" type="button">
+                <button class="btn btn-info" type="submit">
                   <i class="fas fa-search fa-sm"></i>
                 </button>
               </div>
@@ -123,15 +98,27 @@
           <!-- Topbar Navbar -->
           <ul class="navbar-nav ml-auto">
 
-          <li class="nav-item active">
-            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="webboard.php">Webboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="booking.php">Booking</a>
-          </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="professor.php">Professor</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="webboard.php">Webboard</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="booking.php">Booking</a>
+            </li>
+
+            <?php
+            if ($_SESSION['level'] == 'u') {
+              echo '<li class="nav-item">
+                              <a class="nav-link" href="professor_reg.php">Reg Prof</a>
+                              </li>';
+            }
+            ?>
+
 
             <!-- Nav Item - Search Dropdown (Visible Only XS) -->
             <li class="nav-item dropdown no-arrow d-sm-none">
@@ -155,16 +142,31 @@
 
             <!-- Nav Item - User Information -->
             <li class="nav-item dropdown no-arrow">
-                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img class="img-profile rounded-circle" src="../img/profile.jpg">
-                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                    <?php if(isset($_SESSION['email'])) { ?>
-                    <?php echo $_SESSION['email']; }?>
-                    </span>
-                </a>
-                <!-- Dropdown - User Information -->
-                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                  <!-- <a class="dropdown-item" href="#">
+              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php
+                if ($_SESSION['level'] == 'p') {
+                  echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
+                } else {
+                  echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
+                }
+                ?>
+                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                  <?php if (isset($_SESSION['email'])) {
+                    echo $_SESSION['email'];
+                  } ?>
+                </span>
+              </a>
+              <!-- Dropdown - User Information -->
+              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                <?php
+                if ($_SESSION['level'] == 'p') { ?>
+                  <a class="dropdown-item" href="profile.php">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a><?php
+                    }
+                      ?>
+                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -176,13 +178,13 @@
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                  <!-- <div class="dropdown-divider"></div> -->
-                  <a class="dropdown-item" href="logout.php" >
-                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                    Logout
-                  </a>
-                </div>
-              </li>
+                <!-- <div class="dropdown-divider"></div> -->
+                <a class="dropdown-item" href="logout.php">
+                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                  Logout
+                </a>
+              </div>
+            </li>
 
             <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -246,94 +248,128 @@
         <!-- End of Topbar -->
 
 
-      <!-- Begin Page Content -->
-      <!-- Outer Row -->
-  <div class="row justify-content-center">
+        <!-- Begin Page Content -->
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
 
-<div class="col-xl-7 col-lg-8 col-md-3">
+          <div class="col-xl-7 col-lg-8 col-md-3">
 
-<div class="card o-hidden border-0 shadow-lg my-5">
-  <div class="card-body p-0">
-    <!-- Nested Row within Card Body -->
-    <div class="row">
-      <!-- <div class="col-lg-5 d-none d-lg-block bg-register-image"></div> -->
-      <div class="col-lg-12">
-        <div class="p-5">
-          <div class="text-center">
-            <h1 class="h4 text-gray-900 mb-4">Register Professor!</h1>
+            <div class="card o-hidden border-0 shadow-lg my-5">
+              <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                  <!-- <div class="col-lg-5 d-none d-lg-block bg-register-image"></div> -->
+                  <div class="col-lg-12">
+                    <div class="p-5">
+                      <div class="text-center">
+                        <img class="img-profile rounded" src="../img/undraw_career_progress_ivdb.png" width="500px">
+                      </div>
+                      <div class="text-center">
+                        <h1 class="h4 text-gray-900 mb-4">Register Professor!</h1>
+                      </div>
+                      <form class="professor" action=" <?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data">
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Title</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="title" placeholder="อาจารย์" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">First Name</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="firstname" placeholder="มาดี" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Last Name</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="lastname" placeholder="ดีนะ" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Expert</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="expert" placeholder="software etc." required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Position</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="position" placeholder="ผู้ช่วยอาจารย์" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Office</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="office" placeholder="ECC-999" required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Picture</label>
+                          <div class="col-sm-10">
+                            <input type="file" class="form-control form-control-user" name="image" required>
+                          </div>
+                        </div>
+                        <HR>
+                        <div class="form-group">
+                          <input type="submit" class="btn btn-info btn-user btn-block" name="submit" value="Register">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <form class="professor" action=" <?php echo $_SERVER["PHP_SELF"]; ?>"  method = "post">
-            <div class="form-group">
-                <input type="text" class="form-control form-control-user" name ="title" placeholder="Title" required>
-            </div>
-            <div class="form-group">
-              <input type="text" class="form-control form-control-user" name ="expert" placeholder="Expert" required>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control form-control-user" name ="position" placeholder="Position" required>
-            </div>
-            <div class="form-group">
-                <input type="text" class="form-control form-control-user" name ="office" placeholder="Office" required>
-            </div>
-            <div class="form-group">
-                <input type="submit" class="btn btn-info btn-user btn-block" name ="submit" value ="Register" >
-            </div>
-          </form>
+        </div>
+
+      </div>
+
+      <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-</div>
-</div>
 
-</div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- End of Content Wrapper -->
+    <!-- Core plugin JavaScript-->
+    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-  </div>
-  <!-- End of Page Wrapper -->
+    <!-- Custom scripts for all pages-->
+    <script src="../js/Engineer-Clinic.min.js"></script>
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
+    <!-- Page level plugins -->
+    <script src="../vendor/chart.js/Chart.min.js"></script>
 
-  <!-- Logout Modal-->
-  <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">×</span>
-          </button>
-        </div>
-        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-          <a class="btn btn-primary" href="login.html">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap core JavaScript-->
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Core plugin JavaScript-->
-  <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for all pages-->
-  <script src="../js/Engineer-Clinic.min.js"></script>
-
-  <!-- Page level plugins -->
-  <script src="../vendor/chart.js/Chart.min.js"></script>
-
-  <!-- Page level custom scripts -->
-  <script src="../js/demo/chart-area-demo.js"></script>
-  <script src="../js/demo/chart-pie-demo.js"></script>
+    <!-- Page level custom scripts -->
+    <script src="../js/demo/chart-area-demo.js"></script>
+    <script src="../js/demo/chart-pie-demo.js"></script>
 
 </body>
 

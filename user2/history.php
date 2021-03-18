@@ -7,15 +7,8 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$search = $_POST['search'];
-
-if ($connect->connect_error) {
-    die("Connection failed: " . $connect->connect_error);
-}
-
-$result = mysqli_query($connect, "SELECT * FROM professor WHERE expert like '%$search%' and status = '1' or firstname like '%$search%' and status = '1' or lastname like '%$search%' and status = '1' or position like '%$search%' and status = '1' or title like '%$search%' and status = '1'");
-
-$connect->close();
+$email = $_SESSION['email'];
+$result = mysqli_query($connect, "SELECT * FROM booking where status like 0 and user_name like '$email' or status like 1 and user_name like '$email' or status like 2 and user_name like '$email'");
 ?>
 
 <!DOCTYPE html>
@@ -80,30 +73,29 @@ $connect->close();
                         </div>
                     </form>
 
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <li class="nav-item active">
-                        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="professor.php">Professor</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="webboard.php">Webboard</a>
-                        </li>
-                        <li class="nav-item">
-                        <a class="nav-link" href="booking.php">Booking</a>
-                        </li>
+                    <li class="nav-item active">
+                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="professor.php">Professor</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="webboard.php">Webboard</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="booking.php">Booking</a>
+                    </li>
 
-                        <?php
-                                if($_SESSION['level'] == 'u'){
-                                    echo '<li class="nav-item">
-                                        <a class="nav-link" href="professor_reg.php">Reg Prof</a>
-                                        </li>';
-                                }
-                        ?>
+                    <?php
+                            if($_SESSION['level'] == 'u'){
+                                echo '<li class="nav-item">
+                                    <a class="nav-link" href="professor_reg.php">Reg Prof</a>
+                                    </li>';
+                            }
+                    ?>
 
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -126,7 +118,6 @@ $connect->close();
                             </div>
                         </li>
 
-                        <!-- Nav Item - User Information -->
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -172,6 +163,7 @@ $connect->close();
                   Logout
                 </a>
               </div>
+                        </li>
 
                         <div class="topbar-divider d-none d-sm-block"></div>
 
@@ -187,6 +179,7 @@ $connect->close();
                                 <h6 class="dropdown-header bg-info">
                                     Notifications
                                 </h6>
+
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-info">
@@ -194,10 +187,11 @@ $connect->close();
                                         </div>
                                     </div>
                                     <div>
-                                        <span class="font-weight-bold">New booking request BID 003 !</span>
+                                        <span class="font-weight-bold">It's almost time for an subject ... !</span>
                                         <div class="small text-gray-500">December 12, 2020</div>
                                     </div>
                                 </a>
+
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
                                         <div class="icon-circle bg-success">
@@ -205,10 +199,23 @@ $connect->close();
                                         </div>
                                     </div>
                                     <div>
-                                        <span class="font-weight-bold">New booking request BID 004 !</span>
+                                        <span class="font-weight-bold">Cancel booking from ...!</span>
                                         <div class="small text-gray-500">December 7, 2020</div>
                                     </div>
                                 </a>
+
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <span class="font-weight-bold">Successfully booking subject ... !</span>
+                                        <div class="small text-gray-500">December 7, 2020</div>
+                                    </div>
+                                </a>
+
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
                         </li>
@@ -224,34 +231,42 @@ $connect->close();
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Showing results for " <span class="badge badge-info"><?php echo $search; ?></span> "</h1>
-
+                    <h1 class="h3 mb-1 text-gray-800">History</h1>
 
                     <!-- DataProfressor  -->
                     <div class="card shadow mb-4">
                         <?php if ($result->num_rows > 0) { ?>
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered" id="searchTable" width="100%" cellspacing="0">
+                                    <table class="table table-bordered" id="historyTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Title</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
-                                                <th>Expert</th>
-                                                <th>Position</th>
-                                                <th>Office</th>
+                                                <th>BID</th>
+                                                <th>Subject</th>
+                                                <th>U_Name</th>
+                                                <th>P_Name</th>
+                                                <th>Date</th>
+                                                <th>Time</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <?php while ($row = mysqli_fetch_array($result)) : ?>
                                                 <tr>
-                                                    <td><?php echo $row['title']; ?></td>
-                                                    <td><?php echo $row['firstname']; ?></td>
-                                                    <td><?php echo $row['lastname']; ?></td>
-                                                    <td><?php echo $row['expert']; ?></td>
-                                                    <td><?php echo $row['position']; ?></td>
-                                                    <td><?php echo $row['office']; ?></td>
+                                                    <td><?php echo $row['bid'] ?></td>
+                                                    <td><?php echo $row['subject'] ?></td>
+                                                    <td><?php echo $row['user_name'] ?></td>
+                                                    <td><?php echo $row['professor_name'] ?></td>
+                                                    <td><?php echo $row['date'] ?></td>
+                                                    <td><?php echo $row['time'] ?></td>
+                                                    <td><?php if ($row['status'] == "0") { ?>
+                                                            <span class="badge badge-warning">Waiting</span>
+                                                        <?php } else if ($row['status'] == "1") { ?>
+                                                            <span class="badge badge-danger">Rejected</span>
+                                                        <?php } else if ($row['status'] == "2") { ?>
+                                                            <span class="badge badge-success">Accepted</span>
+                                                        <?php } ?>
+                                                    </td>
                                                 </tr>
                                             <?php endwhile; ?>
                                         </tbody>
@@ -261,64 +276,62 @@ $connect->close();
                         <?php } else { ?>
                             <div class="card-body">
                                 <div class="text-center">
-                                    <h2>Not found</h2>
+                                    <h2>No record</h2>
                                 </div>
                             </div>
                         <?php } ?>
                     </div>
+
                 </div>
-                <!-- /.container-fluid -->
+
+                <!-- End of Main Content -->
 
             </div>
-
-            <!-- End of Main Content -->
+            <!-- End of Content Wrapper -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Page Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="../vendor/jquery/jquery.min.js"></script>
+        <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="../js/Engineer-Clinic.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="../js/Engineer-Clinic.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
+        <!-- Page level plugins -->
+        <script src="../vendor/chart.js/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+        <!-- Page level custom scripts -->
+        <script src="../js/demo/chart-area-demo.js"></script>
+        <script src="../js/demo/chart-pie-demo.js"></script>
 
 </body>
 

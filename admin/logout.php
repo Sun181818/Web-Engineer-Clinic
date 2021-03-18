@@ -1,7 +1,7 @@
 <?php
 
     session_start();
-    header("location: login.php");
+    header("location: ../user2/login.php");
     session_destroy();
 
 ?>

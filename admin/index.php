@@ -88,17 +88,6 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
           <span>Approve</span></a>
       </li>
 
-      <li class="nav-item">
-        <a class="nav-link" href="monitor.php">
-          <i class="fas fa-chart-line"></i>
-          <span>Monitor</span></a>
-      </li>
-
-      <li class="nav-item">
-        <a class="nav-link" href="history.php">
-          <i class="fas fa-history"></i>
-          <span>History</span></a>
-      </li>
 
       <!-- Divider -->
       <hr class="sidebar-divider d-none d-md-block">
@@ -213,40 +202,51 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
               <?php while ($row = mysqli_fetch_array($result)) :
                 if ($row['status'] == "0") { ?>
                   <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
-                      <p class="m-0 text-info"><?php echo $row['user_name'] ?></p>
-                    </div>
-                    <div class="card-body">
-                      <p>To Prof. : <?php echo $row['professor_name'] ?> </p>
-                      <div class="my-2"></div>
-                      <p>Detail : <?php echo $row['detail'] ?> </p>
-                      <div class="my-2"></div>
-                      <p>Date : <?php echo $row['date'] ?> </p>
-                      <div class="my-2"></div>
-                      <p>Time : <?php echo $row['time'] ?></p>
-                      <div class="my-2"></div>
-                      <form action="approve.php" method="post">
-                        <div class="form-group">
-                          <input type="hidden" class="form-control" name="status" value="1">
-                        </div>
-                        <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
-                        <button type="submit" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
-                            <i class="fas fa-trash">
-                              <span class="text">Reject</span></i>
-                          </span></button>
-                      </form>
-                      <form action="approve.php" method="post">
-                        <div class="form-group">
-                          <input type="hidden" class="form-control" name="status" value="2">
-                        </div>
-                        <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
-                        <button type="submit" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
-                            <i class="fas fa-check">
-                              <span class="text">Accept</span></i>
-                          </span></button>
-                      </form>
-                    </div>
+                    <?php
+                    $dbuid = $row['uid'];
+                    $dbuser = mysqli_query($connect, "SELECT * FROM user WHERE uid = '$dbuid'");
+                    while ($user = mysqli_fetch_array($dbuser)) : ?>
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
+                        <p class="m-0 text-info"><?php echo $row['user_name'] ?></p>
+                      </div>
+                    <?php endwhile; ?>
+                    <?php
+                    $dbpid = $row['pid'];
+                    $dbprof = mysqli_query($connect, "SELECT * FROM professor WHERE pid = '$dbpid'");
+                    while ($prof = mysqli_fetch_array($dbprof)) : ?>
+                      <div class="card-body">
+                        <p>To Prof. : <?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'] ?></ ?>
+                        </p>
+                        <div class="my-2"></div>
+                        <p>Detail : <?php echo $row['detail'] ?> </p>
+                        <div class="my-2"></div>
+                        <p>Date : <?php echo $row['date'] ?> </p>
+                        <div class="my-2"></div>
+                        <p>Time : <?php echo $row['time'] ?></p>
+                        <div class="my-2"></div>
+                        <form action="approve.php" method="post">
+                          <div class="form-group">
+                            <input type="hidden" class="form-control" name="status" value="1">
+                          </div>
+                          <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                          <button type="submit" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
+                              <i class="fas fa-trash">
+                                <span class="text">Reject</span></i>
+                            </span></button>
+                        </form>
+                        <form action="approve.php" method="post">
+                          <div class="form-group">
+                            <input type="hidden" class="form-control" name="status" value="2">
+                          </div>
+                          <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                          <button type="submit" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
+                              <i class="fas fa-check">
+                                <span class="text">Accept</span></i>
+                            </span></button>
+                        </form>
+                      </div>
+                    <?php endwhile; ?>
                   </div>
               <?php }
               endwhile; ?>

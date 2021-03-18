@@ -11,7 +11,7 @@
     $file = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
 
 
-    $q = "INSERT INTO questions (topic, detail, email, created, reply, pic) VALUES ('$topic', '$detail', '$email', '$created', '$reply', '$file')";
+    $q = "INSERT INTO webboard (topic, detail, email, created, reply, pic) VALUES ('$topic', '$detail', '$email', '$created', '$reply', '$file')";
 
     $result = mysqli_query($connect, $q );
 
