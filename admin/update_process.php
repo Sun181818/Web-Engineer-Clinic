@@ -2,22 +2,23 @@
     //require 'connectdb.php'?>
 <?php
 
-    $uid = $_POST['uid'];
+    $pid = $_POST['pid'];
     $title = $_POST['title'];
-    $user_name = $_POST['user_name'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
     $expert = $_POST['expert'];
     $position = $_POST['position'];
     $office = $_POST['office'];
-    $email = $_POST['email'];
 
 
-    $q = "UPDATE user SET title = '$title',user_name = '$user_name', expert = '$expert', position = '$position', office = '$office', email = '$email' WHERE uid = '$uid'";
+    $q = "UPDATE professor SET title = '$title',firstname = '$firstname',lastname = '$lastname', expert = '$expert', position = '$position', office = '$office' WHERE pid = '$pid'";
 
 
     $result = mysqli_query($connect, $q );
 
     if($result) {
-        header("Location: table_professor.php");
+        //header("Location: table_professor.php");
+        echo $pid . $title . $firstname . $lastname . $expert . $position . $office;
     }
     else {
         echo "Fail" . mysqli_error($connect);

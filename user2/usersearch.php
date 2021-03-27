@@ -85,24 +85,24 @@ $connect->close();
                     <ul class="navbar-nav ml-auto">
 
                         <li class="nav-item active">
-                        <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="professor.php">Professor</a>
+                            <a class="nav-link" href="professor.php">Professor</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="webboard.php">Webboard</a>
+                            <a class="nav-link" href="webboard.php">Webboard</a>
                         </li>
                         <li class="nav-item">
-                        <a class="nav-link" href="booking.php">Booking</a>
+                            <a class="nav-link" href="booking.php">Booking</a>
                         </li>
 
                         <?php
-                                if($_SESSION['level'] == 'u'){
-                                    echo '<li class="nav-item">
+                        if ($_SESSION['level'] == 'u') {
+                            echo '<li class="nav-item">
                                         <a class="nav-link" href="professor_reg.php">Reg Prof</a>
                                         </li>';
-                                }
+                        }
                         ?>
 
 
@@ -129,32 +129,31 @@ $connect->close();
                         <!-- Nav Item - User Information -->
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?php
-                                if($_SESSION['level'] == 'p'){
-                                    echo '<img src="data:image/jpeg;base64,'.base64_encode($_SESSION['picture'] ).'" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
-                                }
-                                else{
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php
+                                if ($_SESSION['level'] == 'p') {
+                                    echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
+                                } else {
                                     echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
                                 }
-                            ?>
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                            <?php if (isset($_SESSION['email'])) {
-                                            echo $_SESSION['email'];
-                            } ?>
-                            </span>
-                        </a>
+                                ?>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                                    <?php if (isset($_SESSION['email'])) {
+                                        echo $_SESSION['email'];
+                                    } ?>
+                                </span>
+                            </a>
                             <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <?php
-                      if($_SESSION['level'] == 'p'){?>
-                        <a class="dropdown-item" href="profile.php">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
-                        </a><?php
-                      }
-                ?>
-                <!-- <a class="dropdown-item" href="#">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <?php
+                                if ($_SESSION['level'] == 'p') { ?>
+                                    <a class="dropdown-item" href="profile.php">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a><?php
+                                    }
+                                        ?>
+                                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -166,16 +165,16 @@ $connect->close();
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                <!-- <div class="dropdown-divider"></div> -->
-                <a class="dropdown-item" href="logout.php">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
-                </a>
-              </div>
+                                <!-- <div class="dropdown-divider"></div> -->
+                                <a class="dropdown-item" href="logout.php">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
+                                </a>
+                            </div>
 
-                        <div class="topbar-divider d-none d-sm-block"></div>
+                            <div class="topbar-divider d-none d-sm-block"></div>
 
-                        <!-- Nav Item - Alerts -->
+                            <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
@@ -221,7 +220,7 @@ $connect->close();
 
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="min-height: 100vh;">
 
                     <!-- Page Heading -->
                     <h1 class="h3 mb-2 text-gray-800">Showing results for " <span class="badge badge-info"><?php echo $search; ?></span> "</h1>

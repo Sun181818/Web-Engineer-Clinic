@@ -217,33 +217,75 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                     <!-- Content Row -->
                     <div class="row justify-content-center">
                         <div class="col-xl-8 col-lg-12 col-md-9">
-                                <?php while ($row = mysqli_fetch_array($result)) : ?>
-                                    <?php
-                                    $dbuid = $row['uid'];
-                                    $dbuser = mysqli_query($connect, "SELECT * FROM user Where uid = '$dbuid'");
-                                    while ($user = mysqli_fetch_array($dbuser)) : ?>
-                                        <div class="card shadow mb-2">
-                                            <div class="card-header py-3">
-                                                <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="m-0 font-weight-bold text-primary"><?php echo $row['topic']; ?></a>
+                            <?php while ($row = mysqli_fetch_array($result)) : ?>
+                                <?php
+                                $dbuid = $row['uid'];
+                                $dbuser = mysqli_query($connect, "SELECT * FROM user Where uid = '$dbuid'");
+                                while ($user = mysqli_fetch_array($dbuser)) : ?>
+                                    <div class="card shadow mb-2">
+                                        <div class="card-header py-3">
+                                            <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="m-0 font-weight-bold text-primary"><?php echo $row['topic']; ?></a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="font-weight-bold">
+                                                <div class="forum-sub-title"><?php echo $row['detail']; ?></div>
                                             </div>
-                                            <div class="card-body">
-                                                <div class="font-weight-bold">
-                                                    <div class="forum-sub-title"><?php echo $row['detail']; ?></div>
+                                            <hr>
+                                            <?php
+                                            if ($_SESSION['level'] == 'p' || $_SESSION['level'] == 'u') {
+                                                echo '<img class="img-profile rounded-circle p-2" src="../img/profile.jpg" height="50px" width="50px" >';
+                                            }
+                                            // } else {
+                                            //     echo '<img src="data:image/jpeg;base64,' . base64_encode($user['picture']) . '" class= "img-profile rounded-circle p-2 " height="auto" width="50px" class="img-thumnail" />';
+                                            // }
+                                            ?>
+                                            &nbsp;&nbsp;
+                                            <?php echo $user['user_name']; ?>
+                                        </div>
+                                    </div>
+                                <?php endwhile; ?>
+                            <?php endwhile; ?>
+                            <tr>
+                                <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
+
+                                    <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
                                                 </div>
-                                                <hr>
-                                                        <?php
-                                                        if ($_SESSION['level'] == 'p') {
-                                                            echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle p-2 " height="auto" width="50px" class="img-thumnail" />';
-                                                        } else {
-                                                            echo '<img class="img-profile rounded-circle p-2" src="../img/profile.jpg" height="50px" width="50px" >';
-                                                        }
-                                                        ?>
-                                                        &nbsp;&nbsp;
-                                                        <?php echo $user['user_name']; ?>
+                                                <form action="add_new_topic.php" method="post" enctype="multipart/form-data">
+                                                    <div class="modal-body">
+
+                                                        <div class="form-group">
+                                                            <label for="topic" class="col-form-label">Topic:</label>
+                                                            <input type="text" class="form-control" name="topic" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="detail" class="col-form-label">Detail:</label>
+                                                            <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="picture" class="col-form-label">Picture:</label>
+                                                            <input type="file" class="form-control form-control-user" name="image">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                        <button type="submit" class="btn btn-info">Confirm</button>
+                                                    </div>
+                                                </form>
                                             </div>
                                         </div>
-                                    <?php endwhile; ?>
-                                <?php endwhile; ?>
+                                    </div>
+                                </td>
+                            </tr>
                         </div>
                         <!-- End of Main Content -->
                     </div>

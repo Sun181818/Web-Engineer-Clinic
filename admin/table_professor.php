@@ -248,8 +248,12 @@ $result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '1'");
                                       <input type="text" class="form-control" name="title" value="<?php echo $row['title']; ?>">
                                     </div>
                                     <div class="form-group">
-                                      <label for="user_name" class="col-form-label">Name:</label>
-                                      <input type="text" class="form-control" name="user_name" value="<?php echo $row['user_name']; ?>">
+                                      <label for="firstname" class="col-form-label">Name:</label>
+                                      <input type="text" class="form-control" name="firstname" value="<?php echo $row['firstname']; ?>">
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="lastname" class="col-form-label">Name:</label>
+                                      <input type="text" class="form-control" name="lastname" value="<?php echo $row['lastname']; ?>">
                                     </div>
                                     <div class="form-group">
                                       <label for="expert" class="col-form-label">Expert:</label>
@@ -263,10 +267,6 @@ $result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '1'");
                                       <label for="office" class="col-form-label">Office:</label>
                                       <input type="text" class="form-control" name="office" value="<?php echo $row['office']; ?>">
                                     </div>
-                                    <div class="form-group">
-                                      <label for="email" class="col-form-label">Email:</label>
-                                      <input type="text" class="form-control" name="email" value="<?php echo $row['email']; ?>">
-                                    </div>
                                   </div>
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -278,7 +278,7 @@ $result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '1'");
                             </div>
                           </div>
                         </td>
-                        
+
 
 
                         <!-- delete -->
@@ -307,8 +307,8 @@ $result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '1'");
                                 <div class="modal-footer">
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                                   <form action="delete_process.php" method="post">
-                                  <input type="hidden" name="uid" value="<?php echo $row['uid']; ?>">
-                                  <button type="submit" class="btn btn-primary">Confirm</button>
+                                    <input type="hidden" name="uid" value="<?php echo $row['uid']; ?>">
+                                    <button type="submit" class="btn btn-primary">Confirm</button>
                                   </form>
                                   <!-- <a href="delete_process.php?uid=<?php echo $row['uid']; ?>" class="btn btn-primary">
                                     Confirm
@@ -336,7 +336,7 @@ $result = mysqli_query($connect, "SELECT * FROM professor WHERE status = '1'");
                               <form action="add_process.php" method="post">
                                 <div class="modal-body">
 
-                                <div class="form-group">
+                                  <div class="form-group">
                                     <label for="email" class="col-form-label">Email:</label>
                                     <input type="text" class="form-control" name="email">
                                   </div>
