@@ -246,7 +246,15 @@ mysqli_query($connect, $sql_u);
                         <div class="user-image"> <img src="../img/profile.jpg" width="40" class="rounded-circle"> </div>
                         &nbsp;&nbsp;
                         <div class="d-flex flex-column">
-                          <h6 class="mb-0"><?php echo $result['email']; ?></h6> <span class="date"><?php echo $result['created']; ?></span>
+                          <?php
+                          $usernamecheck = $result['email'];
+                          $sql_ucheck = "SELECT * FROM user where email = '$usernamecheck'";
+                          $query_ucheck = mysqli_query($connect, $sql_ucheck);
+                          $result_ucheck = mysqli_fetch_assoc($query_ucheck);
+                          ?>
+                          <h6 class="mb-0"><?php echo $result_ucheck['user_name'] ?></h6>
+                          <span class="date"><?php $date = date_create($row['created']);
+                                              echo date_format($date, 'd-F-Y'); ?></span>
                         </div>
                       </div>
                     </div>
@@ -277,9 +285,36 @@ mysqli_query($connect, $sql_u);
                     if ($rows_a > 0) {
                       $i = 1;
                       while ($result_a = mysqli_fetch_assoc($query_a)) {
+                        $emailcheck = $result_a['email'];
+                        $sql_lu = "SELECT * FROM user where email = '$emailcheck'";
+                        $query_lu = mysqli_query($connect, $sql_lu);
+                        $result_lu = mysqli_fetch_assoc($query_lu);
                     ?>
+
+
                         <hr>
-                        <h6 class="text-primary"><?php echo $result_a['email']; ?></h6>
+                        <?php
+                        if ($result_lu['level'] == 'u') { ?>
+                          <h6 class="text-primary"><?php echo $result_a['user_name']; ?></h6>
+                        <?php } else if ($result_lu['level'] == 'a') { ?>
+                          <h6 class="text-primary"><?php echo "Admin " . $result_a['user_name']; ?></h6>
+                        <?php
+                        } else if ($result_lu['level']['level'] == 'p') {
+                          $emailprof = $result_a['email'];
+                          //professor
+                          $sql_pu = "SELECT * FROM user where email = '$emailprof'";
+                          $query_pu = mysqli_query($connect, $sql_pu);
+                          $result_pu = mysqli_fetch_assoc($query_pu);
+
+                          $sql_p = "SELECT * FROM professor where user_id = '$result_lu[uid]'";
+                          $query_p = mysqli_query($connect, $sql_p);
+                          $result_p = mysqli_fetch_assoc($query_p);
+
+                        ?>
+                          <h6 class="text-primary"><?php echo $result_p['title'] . " " . $result_p['firstname'] . " " . $result_p['lastname']; ?></h6>
+                        <?php }
+                        ?>
+
                         <?php echo nl2br($result_a['comment']); ?>
                     <?php
                       }

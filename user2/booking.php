@@ -169,7 +169,7 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                   Logout
                 </a>
               </div>
-            </li>            
+            </li>
           </ul>
         </nav>
         <!-- End of Topbar -->
@@ -204,6 +204,7 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                   $dbprof = mysqli_query($connect, "SELECT * FROM professor WHERE pid = '$dbpid'");
                                   while ($prof = mysqli_fetch_array($dbprof)) :
                                   ?>
+                                    
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div class="media-body">
                                       <h5 class="mb-4">
@@ -223,6 +224,10 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                         <?php echo $row['detail']; ?>
                                       </div>
                                       <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Office:</span>
+                                        <?php echo $prof['office']; ?>
+                                      </div>
+                                      <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Date:</span>
                                         <?php $date = date_create($row['date']);
                                         echo date_format($date, 'd-F-Y'); ?>
@@ -233,7 +238,8 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                       </div>
                                       <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Created:</span>
-                                        <?php $date = date_create($row['created']); echo date_format($date, 'd-F-Y H:i a'); ?>
+                                        <?php $date = date_create($row['created']);
+                                        echo date_format($date, 'd-F-Y H:i a'); ?>
                                       </div>
                                     </div>
                                     <div class="col-3 float-right">
@@ -241,12 +247,12 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                         <?php
                                         echo '<img src="data:image/jpeg;base64,' . base64_encode($prof['picture']) . '" class= "img-profile rounded-circle" height="80px" width="80px" class="img-thumnail" />';
                                         ?>
-                                      </div>                                     
+                                      </div>
                                       <br>
                                       <div class="float-left">
                                         <?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname']; ?>
                                       </div>
-                                    </div>                                    
+                                    </div>
                                   <?php
                                   endwhile;
                                   ?>
@@ -281,6 +287,7 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                   $dbprof = mysqli_query($connect, "SELECT * FROM user WHERE uid = '$dbpid'");
                                   while ($prof = mysqli_fetch_array($dbprof)) :
                                   ?>
+
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div class="media-body float-left">
                                       <h5 class="mb-4">
@@ -301,7 +308,8 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                       </div>
                                       <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Date:</span>
-                                        <?php echo $row['date']; ?>
+                                        <?php $date = date_create($row['date']);
+                                        echo date_format($date, 'd-F-Y'); ?>
                                       </div>
                                       <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Time:</span>
@@ -313,7 +321,8 @@ $result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' o
                                       </div>
                                       <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Created:</span>
-                                        <?php echo $row['created_at']; ?>
+                                        <?php $date = date_create($row['created']);
+                                        echo date_format($date, 'd-F-Y H:i a'); ?>
                                       </div>
                                     </div>
 

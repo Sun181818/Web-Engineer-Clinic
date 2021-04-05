@@ -260,7 +260,7 @@ $max->modify("+30 days");
                                     <td>
                                       <?php echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"  class="rounded" height="50px" width="50px"/>'; ?>
                                     </td>
-                                    <td><a href="professor_profile.php?pid=<?php echo $row['pid']; ?>" class="user-link"><?php echo "       " . $row['title'] . " " . $row['firstname'] . " " . $row['lastname']; ?><br></a>
+                                    <td><a href="professor_profile.php?pid=<?php echo $row['pid']; ?>" class="user-link"><?php echo $row['title'] . " " . $row['firstname'] . " " . $row['lastname']; ?><br></a>
                                       <?php echo $row['expert']; ?></td>
                                     <!-- <td style="height:100px" class="text-left"><?php echo $row['expert']; ?></td> -->
                                     <!-- <td class="text-center"><?php echo $row['position']; ?></td> -->
