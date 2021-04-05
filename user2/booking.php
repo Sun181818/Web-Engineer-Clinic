@@ -8,9 +8,13 @@ if (!isset($_SESSION['email'])) {
 include '../connectdb.php';
 $varUID = $_SESSION['uid'];
 $varEmail = $_SESSION['email'];
+$varPID = $_SESSION['pid'];
 
-$result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
+$result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID' order by created_at desc");
+//$result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '' order by created_at desc");
 
+
+$result2 = mysqli_query($connect, "SELECT * FROM booking where pid = '$varPID' order by created_at desc");
 
 ?>
 <!DOCTYPE html>
@@ -66,7 +70,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
           <!-- Topbar Search -->
           <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
               <div class="input-group-append">
                 <button class="btn btn-info" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -165,70 +169,30 @@ $result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
                   Logout
                 </a>
               </div>
-            </li>
-
-            <div class="topbar-divider d-none d-sm-block"></div>
-
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">2</span>
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header bg-info">
-                  Notifications
-                </h6>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-info">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <span class="font-weight-bold">New booking request BID 003 !</span>
-                    <div class="small text-gray-500">December 12, 2020</div>
-                  </div>
-                </a>
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <span class="font-weight-bold">New booking request BID 004 !</span>
-                    <div class="small text-gray-500">December 7, 2020</div>
-                  </div>
-                </a>
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-              </div>
-            </li>
-
-
+            </li>            
           </ul>
-
         </nav>
         <!-- End of Topbar -->
 
 
         <!-- Begin Page Content -->
         <div class="container-fluid" style="min-height: 100vh;">
-
           <!-- Outer Row -->
           <div class="row justify-content-center">
-
             <div class="col-xl-8 col-lg-12 col-md-9">
-
               <div class="container">
                 <div class="row">
                   <div class="col-md-12">
                     <?php
                     if ($_SESSION['level'] == 'u') {
+                      if ($result->num_rows == 0) {
+                        echo "<div class='card-body'> 
+                          <div class='text-center'>
+                          <h1>No Booking</h1>
+                          </div>
+                          </div>";
+                      }
                       while ($row = mysqli_fetch_array($result)) :
-
                     ?>
                         <div class="card card-white mb-5 shadow">
                           <div class="card-body">
@@ -240,76 +204,178 @@ $result = mysqli_query($connect, "SELECT * FROM booking where uid = '$varUID'");
                                   $dbprof = mysqli_query($connect, "SELECT * FROM professor WHERE pid = '$dbpid'");
                                   while ($prof = mysqli_fetch_array($dbprof)) :
                                   ?>
-                                    <div class="msg-img">
-                                      <?php
-                                      echo '<img src="data:image/jpeg;base64,' . base64_encode($prof['picture']) . '" class= "img-profile rounded-circle" height="150px" width="150px" class="img-thumnail" />';
-                                      ?>
-                                    </div>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <div class="media-body">
                                       <h5 class="mb-4">
-                                      <?php
-                                        echo "Subject: " . $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'];
-                                        endwhile;
-                                      ?>
-                                      <?php if ($row['status'] == '2') { ?>
-                                        <span class="badge badge-success mx-3">success</span>
-                                      <?php } else if ($row['status'] == '1') { ?>
-                                        <span class="badge badge-danger mx-3">Reject</span>
-                                      <?php } else if ($row['status'] == '0') { ?>
-                                        <span class="badge badge-info mx-3">Pending</span>
-                                      <?php } ?>
+                                        <?php
+                                        echo $row['subject'];
+                                        ?>
+                                        <?php if ($row['status'] == '2') { ?>
+                                          <span class="badge badge-success mx-3">success</span>
+                                        <?php } else if ($row['status'] == '1') { ?>
+                                          <span class="badge badge-danger mx-3">Reject</span>
+                                        <?php } else if ($row['status'] == '0') { ?>
+                                          <span class="badge badge-warning mx-3">Pending</span>
+                                        <?php } ?>
                                       </h5>
                                       <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Details:</span>
+                                        <?php echo $row['detail']; ?>
+                                      </div>
+                                      <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Date:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['date']; ?></span>
+                                        <?php $date = date_create($row['date']);
+                                        echo date_format($date, 'd-F-Y'); ?>
                                       </div>
                                       <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Time:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['time']; ?></span>
-                                      </div>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Subject:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['subject']; ?></span>
-                                      </div>
-                                      <div class="mb-3">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Details:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['detail']; ?></span>
+                                        <?php echo $row['time']; ?>
                                       </div>
                                       <div class="mb-3">
                                         <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Created:</span>
-                                        <span class="badge badge-info mx-3"><?php echo $row['created_at']; ?></span>
+                                        <?php $date = date_create($row['created']); echo date_format($date, 'd-F-Y H:i a'); ?>
                                       </div>
-
-                                      <!-- <div class="mb-5">
-                                        <span class="mr-2 d-block d-sm-inline-block mb-1 mb-sm-0">Clients:</span>
-                                        <span class="border-right pr-2 mr-2">John Inoue</span>
-                                        <span class="border-right pr-2 mr-2"> john@example.com</span>
-                                        <span>123-563-789</span>
-                                    </div> -->
-                                      <!-- <a href="#" class="btn-gray">Send Message</a> -->
                                     </div>
+                                    <div class="col-3 float-right">
+                                      <div class="float=left">
+                                        <?php
+                                        echo '<img src="data:image/jpeg;base64,' . base64_encode($prof['picture']) . '" class= "img-profile rounded-circle" height="80px" width="80px" class="img-thumnail" />';
+                                        ?>
+                                      </div>                                     
+                                      <br>
+                                      <div class="float-left">
+                                        <?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname']; ?>
+                                      </div>
+                                    </div>                                    
+                                  <?php
+                                  endwhile;
+                                  ?>
                                 </div>
-                                <!-- <div class="buttons-to-right">
-                                <a href="#" class="btn-gray mr-2"><i class="far fa-times-circle mr-2"></i> Reject</a>
-                                <a href="#" class="btn-gray"><i class="far fa-check-circle mr-2"></i> Approve</a>
-                            </div> -->
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                    <?php
+                      endwhile;
+                    }
+                    ?>
+                    <?php
+                    if ($_SESSION['level'] == 'p') {
+                      if ($result2->num_rows == 0) {
+                        echo "<div class='card-body'> 
+                          <div class='text-center'>
+                          <h1>No Booking</h1>
+                          </div>
+                          </div>";
+                      }
+                      while ($row = mysqli_fetch_array($result2)) :
+                    ?>
+
+                        <div class="card card-white mb-5 shadow">
+                          <div class="card-body">
+                            <ul class="list-unstyled">
+                              <li class="position-relative booking">
+                                <div class="media">
+                                  <?php
+                                  $dbpid = $row['uid'];
+                                  $dbprof = mysqli_query($connect, "SELECT * FROM user WHERE uid = '$dbpid'");
+                                  while ($prof = mysqli_fetch_array($dbprof)) :
+                                  ?>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="media-body float-left">
+                                      <h5 class="mb-4">
+                                        <?php
+                                        echo $row['subject'];
+                                        ?>
+                                        <?php if ($row['status'] == '2') { ?>
+                                          <span class="badge badge-success mx-3">success</span>
+                                        <?php } else if ($row['status'] == '1') { ?>
+                                          <span class="badge badge-danger mx-3">Reject</span>
+                                        <?php } else if ($row['status'] == '0') { ?>
+                                          <span class="badge badge-warning mx-3">Pending</span>
+                                        <?php } ?>
+                                      </h5>
+                                      <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Details:</span>
+                                        <?php echo $row['detail']; ?>
+                                      </div>
+                                      <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Date:</span>
+                                        <?php echo $row['date']; ?>
+                                      </div>
+                                      <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Time:</span>
+                                        <?php echo $row['time']; ?>
+                                      </div>
+                                      <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> From:</span>
+                                        <?php echo $prof['email']; ?>
+                                      </div>
+                                      <div class="mb-3">
+                                        <span class="mr-2 d-block d-sm-inline-block mb-5 mb-sm-0"> Created:</span>
+                                        <?php echo $row['created_at']; ?>
+                                      </div>
+                                    </div>
+
+                                    <?php if ($row['status'] == '0') { ?>
+                                      <div class="msg-img text-center float-right">
+
+                                        <div class="float-left">
+                                          <form action="approve.php" method="post">
+                                            <div class="form-group">
+                                              <input type="hidden" class="form-control" name="status" value="2">
+                                            </div>
+                                            <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                                            <button type="submit" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
+                                                <i class="fas fa-check">
+                                                  <span class="text">Accept</span></i>
+                                              </span></button>
+                                          </form>
+                                        </div>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <div class="float-right">
+
+                                          <form action="approve.php" method="post">
+                                            <div class="form-group">
+                                              <input type="hidden" class="form-control" name="status" value="1">
+                                            </div>
+                                            <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                                            <button type="submit" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
+                                                <i class="fas fa-trash">
+                                                  <span class="text">Reject</span></i>
+                                              </span></button>
+                                          </form>
+                                        </div>
+
+                                        <!-- <div>
+                                        <?php
+                                        echo '<img class="img-profile rounded-circle" height="80px" width="80px" class="img-thumnail"src="../img/profile.jpg">';
+                                        //echo '<img src="data:image/jpeg;base64,' . base64_encode($prof['picture']) . '" class= "img-profile rounded-circle" height="80px" width="80px" class="img-thumnail" />';
+                                        ?>
+                                      </div>
+                                      <br>
+                                      <div>
+                                        <?php echo $prof['email']; ?>
+                                      </div> -->
+
+                                      </div>
+                                    <?php } ?>
+
+                                  <?php
+                                  endwhile;
+                                  ?>
+                                </div>
                               </li>
 
                             </ul>
 
                           </div>
                         </div>
-                      <?php endwhile;
+
+                    <?php
+                      endwhile;
                     }
-                    if ($_SESSION['level'] == 'p') {
-                      while ($row = mysqli_fetch_array($result)) : ?>
-
-
-
-
-                    <?php endwhile;
-                    } ?>
+                    ?>
 
                   </div>
                 </div>

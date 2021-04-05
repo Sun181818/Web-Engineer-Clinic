@@ -64,7 +64,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 0 and 
                     <!-- Topbar Search -->
                     <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
                             <div class="input-group-append">
                                 <button class="btn btn-info" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -76,26 +76,26 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 0 and 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                    <li class="nav-item active">
-                    <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="professor.php">Professor</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="webboard.php">Webboard</a>
-                    </li>
-                    <li class="nav-item">
-                    <a class="nav-link" href="booking.php">Booking</a>
-                    </li>
+                        <li class="nav-item active">
+                            <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="professor.php">Professor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="webboard.php">Webboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="booking.php">Booking</a>
+                        </li>
 
-                    <?php
-                            if($_SESSION['level'] == 'u'){
-                                echo '<li class="nav-item">
+                        <?php
+                        if ($_SESSION['level'] == 'u') {
+                            echo '<li class="nav-item">
                                     <a class="nav-link" href="professor_reg.php">Reg Prof</a>
                                     </li>';
-                            }
-                    ?>
+                        }
+                        ?>
 
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
@@ -120,32 +120,31 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 0 and 
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <?php
-                                if($_SESSION['level'] == 'p'){
-                                    echo '<img src="data:image/jpeg;base64,'.base64_encode($_SESSION['picture'] ).'" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
-                                }
-                                else{
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <?php
+                                if ($_SESSION['level'] == 'p') {
+                                    echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
+                                } else {
                                     echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
                                 }
-                            ?>
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
-                            <?php if (isset($_SESSION['email'])) {
-                                            echo $_SESSION['email'];
-                            } ?>
-                            </span>
-                        </a>
+                                ?>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
+                                    <?php if (isset($_SESSION['email'])) {
+                                        echo $_SESSION['email'];
+                                    } ?>
+                                </span>
+                            </a>
                             <!-- Dropdown - User Information -->
-              <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                <?php
-                      if($_SESSION['level'] == 'p'){?>
-                        <a class="dropdown-item" href="profile.php">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
-                        </a><?php
-                      }
-                ?>
-                <!-- <a class="dropdown-item" href="#">
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <?php
+                                if ($_SESSION['level'] == 'p') { ?>
+                                    <a class="dropdown-item" href="profile.php">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Profile
+                                    </a><?php
+                                    }
+                                        ?>
+                                <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
                   </a>
@@ -157,69 +156,69 @@ $result = mysqli_query($connect, "SELECT * FROM booking where status like 0 and 
                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                     Activity Log
                   </a> -->
-                <!-- <div class="dropdown-divider"></div> -->
-                <a class="dropdown-item" href="logout.php">
-                  <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                  Logout
-                </a>
-              </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">2</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header bg-info">
-                                    Notifications
-                                </h6>
-
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-info">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">It's almost time for an subject ... !</span>
-                                        <div class="small text-gray-500">December 12, 2020</div>
-                                    </div>
+                                <!-- <div class="dropdown-divider"></div> -->
+                                <a class="dropdown-item" href="logout.php">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Logout
                                 </a>
-
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">Cancel booking from ...!</span>
-                                        <div class="small text-gray-500">December 7, 2020</div>
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">Successfully booking subject ... !</span>
-                                        <div class="small text-gray-500">December 7, 2020</div>
-                                    </div>
-                                </a>
-
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
                         </li>
 
+                        <!--
+            <div class="topbar-divider d-none d-sm-block"></div>
+
+
+            <li class="nav-item dropdown no-arrow mx-1">
+              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-bell fa-fw"></i>
+
+                <span class="badge badge-danger badge-counter">2</span>
+              </a>
+
+              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                <h6 class="dropdown-header bg-info">
+                  Notifications
+                </h6>
+
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-info">
+                      <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">It's almost time for an subject ... !</span>
+                    <div class="small text-gray-500">December 12, 2020</div>
+                  </div>
+                </a>
+
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Cancel booking from ...!</span>
+                    <div class="small text-gray-500">December 7, 2020</div>
+                  </div>
+                </a>
+
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Successfully booking subject ... !</span>
+                    <div class="small text-gray-500">December 7, 2020</div>
+                  </div>
+                </a>
+
+                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+              </div>
+            </li> -->
 
                     </ul>
 

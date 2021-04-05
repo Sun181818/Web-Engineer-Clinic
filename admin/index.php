@@ -7,7 +7,7 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM booking ");
+$result = mysqli_query($connect, "SELECT * FROM booking WHERE status = '0'");
 
 ?>
 <!DOCTYPE html>
@@ -55,8 +55,8 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
         <a class="nav-link" href="index.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <i class="fas fa-fw fa-book"></i>
+          <span>Approve Booking</span></a>
       </li>
 
 
@@ -85,7 +85,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
       <li class="nav-item">
         <a class="nav-link" href="approve_professor.php">
           <i class="fas fa-user-check"></i>
-          <span>Approve</span></a>
+          <span>Approve Professor</span></a>
       </li>
 
 
@@ -117,7 +117,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
           <!-- Topbar Search -->
           <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
               <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -189,17 +189,25 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
 
 
         <!-- Begin Page Content -->
-        <div class="container-fluid">
+        <div class="container fluid justify content center">
 
           <!-- Page Heading -->
-          <h1 class="h3 mb-4 text-gray-800">Booking</h1>
+          <h1 class="h3 mb-4 text-gray-800">Approve Booking</h1>
 
           <div class="row">
 
-            <div class="col-lg-12">
+            <div class="col-lg-10">
 
               <!-- Brand Buttons -->
-              <?php while ($row = mysqli_fetch_array($result)) :
+              <?php 
+               if ($result->num_rows == 0){
+                echo "<div class='card-body'> 
+                <div class='text-center'>
+                <h1>No Booking</h1>
+                </div>
+                </div>";
+              }
+              while ($row = mysqli_fetch_array($result)) :
                 if ($row['status'] == "0") { ?>
                   <div class="card shadow mb-4">
                     <?php
@@ -207,16 +215,76 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
                     $dbuser = mysqli_query($connect, "SELECT * FROM user WHERE uid = '$dbuid'");
                     while ($user = mysqli_fetch_array($dbuser)) : ?>
                       <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary"><?php echo "(" . $row['bid'] . ") " . $row['subject'] ?></h6>
-                        <p class="m-0 text-info"><?php echo $row['user_name'] ?></p>
+                        <h6 class="m-0 font-weight-bold text-primary"><?php echo $row['subject'] . " (" . $row['bid'] . ") " ?></h6>
+                        <!-- <p class="m-0 text-info"><?php echo $user['email'] ?></p> -->
                       </div>
-                    <?php endwhile; ?>
+
                     <?php
                     $dbpid = $row['pid'];
                     $dbprof = mysqli_query($connect, "SELECT * FROM professor WHERE pid = '$dbpid'");
                     while ($prof = mysqli_fetch_array($dbprof)) : ?>
                       <div class="card-body">
-                        <p>To Prof. : <?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'] ?></ ?>
+                      <div class = "col-sm-10 float-left">
+                        <form>
+
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label">From</label>
+                          <div class="col-md-7 mb-2">
+                            <input type="email" class="form-control" id="colFormLabel" value = "<?php echo $user['email']; ?>" readonly>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label">Professor</label>
+                          <div class="col-md-7 mb-2">
+                            <?php echo '<img src="data:image/jpeg;base64,' . base64_encode($prof['picture']) . '"  class= "img-profile rounded" height="100px" width="100px"/>'; ?>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label"></label>
+                          <div class="col-md-7 mb-2">
+                            <input type="text" class="form-control" id="colFormLabel" value = "<?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'] ?>" readonly>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label">Detail</label>
+                          <div class="col-md-7 mb-2">
+                            <textarea  class="form-control" id="colFormLabel" value = "<?php echo $row['detail'] ?> " readonly rows="3"><?php echo $row['detail'] ?></textarea>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label">Date</label>
+                          <div class="col-md-7 mb-2">
+                            <input type="text" class="form-control" id="colFormLabel" value = "<?php echo $row['date']?>" readonly>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label">Time</label>
+                          <div class="col-md-7 mb-2">
+                            <input type="text" class="form-control" id="colFormLabel" value = "<?php echo $row['time'] ?>" readonly>
+                          </div>
+                        </div>
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label"></label>
+                          <div class="col-md-7 mb-2">
+                            <p>Free time for this profeesor : <?php echo $prof['free_time']?></p>
+                          </div>
+                        </div>
+
+                        <div class="form-group row">
+                          <label for="colFormLabel" class="col-sm-2 col-form-label">Created at</label>
+                          <div class="col-md-7 mb-2">
+                            <input type="text" class="form-control" id="colFormLabel" value = "<?php echo $row['created_at'] ?>" readonly>
+                          </div>
+                        </div>
+
+                      </form>
+
+                        <!-- <p>From : <?php echo $user['email']; ?>
+                        </p>
+                        <p>To : <?php echo $prof['title'] . " " . $prof['firstname'] . " " . $prof['lastname'] ?></ ?>
                         </p>
                         <div class="my-2"></div>
                         <p>Detail : <?php echo $row['detail'] ?> </p>
@@ -224,7 +292,9 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
                         <p>Date : <?php echo $row['date'] ?> </p>
                         <div class="my-2"></div>
                         <p>Time : <?php echo $row['time'] ?></p>
-                        <div class="my-2"></div>
+                        <p>created at : <?php echo $row['created_at'] ?></p> -->
+                        </div>
+                        <!-- <div class="my-2"></div>
                         <form action="approve.php" method="post">
                           <div class="form-group">
                             <input type="hidden" class="form-control" name="status" value="1">
@@ -244,26 +314,57 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
                               <i class="fas fa-check">
                                 <span class="text">Accept</span></i>
                             </span></button>
-                        </form>
+                        </form> -->
+                        <div class="msg-img float-right">
+
+                        <div class="float-left">
+                        <form action="approve.php" method="post">
+                            <div class="form-group">
+                              <input type="hidden" class="form-control" name="status" value="2">
+                            </div>
+                            <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                            <button type="submit" class="btn btn-success btn-icon-split"><span class="icon text-white-100">
+                                <i class="fas fa-check">
+                                  <span class="text">Accept</span></i>
+                              </span></button>
+                          </form>
+                          </div>
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <div class="float-right">
+                        <form action="approve.php" method="post">
+                            <div class="form-group">
+                              <input type="hidden" class="form-control" name="status" value="1">
+                            </div>
+                            <input type="hidden" name="bid" value="<?php echo $row['bid']; ?>">
+                            <button type="submit" class="btn btn-danger btn-icon-split"><span class="icon text-white-100">
+                                <i class="fas fa-trash">
+                                  <span class="text">Reject</span></i>
+                              </span></button>
+                          </form>
+                          </div>
+
+                        </div>
+                        <?php endwhile; ?>
+
+                        </div>
+                      <?php endwhile; ?>
                       </div>
-                    <?php endwhile; ?>
-                  </div>
-              <?php }
+                  <?php }
               endwhile; ?>
 
+                  </div>
             </div>
+
           </div>
+
 
         </div>
 
-
       </div>
+      <!-- /.container-fluid -->
 
     </div>
-    <!-- /.container-fluid -->
-
-  </div>
-  <!-- End of Main Content -->
+    <!-- End of Main Content -->
 
   </div>
   <!-- End of Content Wrapper -->

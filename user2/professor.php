@@ -7,8 +7,13 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 $varEmail = $_SESSION['email'];
+$varUid = $_SESSION['uid'];
 $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
 
+$min = new DateTime();
+$min->modify("+1 days");
+$max = new DateTime();
+$max->modify("+30 days");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,7 +68,7 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
           <!-- Topbar Search -->
           <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
               <div class="input-group-append">
                 <button class="btn btn-info" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -164,20 +169,22 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
               </div>
             </li>
 
+            <!--
             <div class="topbar-divider d-none d-sm-block"></div>
 
-            <!-- Nav Item - Alerts -->
+
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
+
                 <span class="badge badge-danger badge-counter">2</span>
               </a>
-              <!-- Dropdown - Alerts -->
+
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header bg-info">
                   Notifications
                 </h6>
+
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-info">
@@ -185,10 +192,11 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
                     </div>
                   </div>
                   <div>
-                    <span class="font-weight-bold">New booking request BID 003 !</span>
+                    <span class="font-weight-bold">It's almost time for an subject ... !</span>
                     <div class="small text-gray-500">December 12, 2020</div>
                   </div>
                 </a>
+
                 <a class="dropdown-item d-flex align-items-center" href="#">
                   <div class="mr-3">
                     <div class="icon-circle bg-success">
@@ -196,13 +204,26 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
                     </div>
                   </div>
                   <div>
-                    <span class="font-weight-bold">New booking request BID 004 !</span>
+                    <span class="font-weight-bold">Cancel booking from ...!</span>
                     <div class="small text-gray-500">December 7, 2020</div>
                   </div>
                 </a>
+
+                <a class="dropdown-item d-flex align-items-center" href="#">
+                  <div class="mr-3">
+                    <div class="icon-circle bg-success">
+                      <i class="fas fa-donate text-white"></i>
+                    </div>
+                  </div>
+                  <div>
+                    <span class="font-weight-bold">Successfully booking subject ... !</span>
+                    <div class="small text-gray-500">December 7, 2020</div>
+                  </div>
+                </a>
+
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
-            </li>
+            </li> -->
 
 
           </ul>
@@ -215,7 +236,6 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
         <div class="container-fluid" style="min-height: 100vh;">
           <!-- Outer Row -->
           <div class="row justify-content-center">
-
             <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
             <div class="col-xl-8 col-lg-12 col-md-9">
               <!-- DataProfressor  -->
@@ -231,9 +251,6 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
                                 <tr>
                                   <th><span></span></th>
                                   <th><span>Professor</span></th>
-                                  <th class="text-center"><span>Expert</span></th>
-                                  <th class="text-center"><span>Position</span></th>
-                                  <!-- <th class="text-center"><span>Office</span></th> -->
                                   <th>&nbsp;</th>
                                 </tr>
                               </thead>
@@ -243,14 +260,18 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
                                     <td>
                                       <?php echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '"  class="rounded" height="50px" width="50px"/>'; ?>
                                     </td>
-                                    <td><a href="#" class="user-link"><?php echo "       " . $row['title'] . " " . $row['firstname'] . " " . $row['lastname']; ?></a></td>
-                                    <td class="text-center"><?php echo $row['expert']; ?></td>
-                                    <td class="text-center"><?php echo $row['position']; ?></td>
+                                    <td><a href="professor_profile.php?pid=<?php echo $row['pid']; ?>" class="user-link"><?php echo "       " . $row['title'] . " " . $row['firstname'] . " " . $row['lastname']; ?><br></a>
+                                      <?php echo $row['expert']; ?></td>
+                                    <!-- <td style="height:100px" class="text-left"><?php echo $row['expert']; ?></td> -->
+                                    <!-- <td class="text-center"><?php echo $row['position']; ?></td> -->
                                     <!-- <td class="text-center"><?php echo $row['office']; ?></td> -->
-
-                                    <td style="width: 20%;">
+                                    <td>
                                       <!-- Book -->
-                                      <button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#booking_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-calendar-check"></i></button>
+                                      <?php
+                                      if ($_SESSION['level'] == 'u') { ?>
+                                        <button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#booking_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-calendar-check"></i></button>
+                                      <?php } ?>
+                                      <!-- <button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#booking_professor_Modal<?php echo $row['pid']; ?>" data-whatever="@mdo"><i class="fas fa-calendar-check"></i></button> -->
                                       <div class="modal fade" id="booking_professor_Modal<?php echo $row['pid']; ?>" tabindex="-1" role="dialog" aria-labelledby="booking_professor_ModalLabel<?php echo $row['pid']; ?>" aria-hidden="true">
                                         <div class="modal-dialog" role="document">
                                           <div class="modal-content">
@@ -262,7 +283,6 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
                                             </div>
                                             <form action="booking_process.php" method="post">
                                               <div class="modal-body">
-
                                                 <div class="form-group">
                                                   <div class="text-center">
                                                     <p><?php echo '<img src="data:image/jpeg;base64,' . base64_encode($row['picture']) . '" class="rounded" height="100px" width="100px"/>'; ?></p>
@@ -274,32 +294,27 @@ $result = mysqli_query($connect, "SELECT * FROM professor where status = '1'");
                                                   <label for="office">Office</label>
                                                   <input type="text" class="form-control" name="office" value="<?php echo $row['office']; ?>" disabled>
                                                 </div>
-
                                                 <div class="form-group">
                                                   <label for="subject">Subject</label>
                                                   <input type="text" class="form-control" name="subject" required>
                                                 </div>
-
                                                 <div class="form-group">
                                                   <label for="detail">Detail</label>
                                                   <textarea class="form-control" name="detail" rows="3" required></textarea>
                                                 </div>
-
                                                 <div class="form-group">
                                                   <label for="date">Date & Time</label>
                                                   <div class="form-row">
                                                     <div class="col">
-                                                      <input type="date" class="form-control" name="date" required>
+                                                      <input type="date" class="form-control" value="<?php echo date("Y-m-d"); ?>" min=<?= $min->format("Y-m-d") ?> max=<?= $max->format("Y-m-d") ?> name="date" required>
                                                     </div>
                                                     <div class="col">
-                                                      <input type="time" class="form-control" name="time" required>
+                                                      <input type="time" class="form-control"  name="time" min="09:00" max="16:00" required>
                                                     </div>
                                                   </div>
                                                 </div>
                                                 <input type="hidden" name="uid" value="<?php echo $_SESSION['uid']; ?>">
                                                 <input type="hidden" name="pid" value="<?php echo $row['pid']; ?>">
-
-
                                               </div>
                                               <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

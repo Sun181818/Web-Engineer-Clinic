@@ -16,11 +16,12 @@ if (isset($_POST['submit'])) {
   $expert = $_POST['expert'];
   $position = $_POST['position'];
   $office = $_POST['office'];
+  $free_time = $_POST['free_time'];
   $status = "0";
   $created_at = date('Y-m-d H:i:s');
   $picture = addslashes(file_get_contents($_FILES["image"]["tmp_name"]));
 
-  $query = "INSERT INTO professor (user_id, title, firstname, lastname, expert, position, office, picture, created_at, status ,updated_at) values ('$uid','$title','$firstname','$lastname','$expert','$position','$office','$picture','$created_at','$status','$created_at')";
+  $query = "INSERT INTO professor (user_id, title, firstname, lastname, expert, position, office, picture,free_time,created_at, status ,updated_at) values ('$uid','$title','$firstname','$lastname','$expert','$position','$office','$picture','$free_time','$created_at','$status','$created_at')";
   $result = mysqli_query($connect, $query);
 
   if ($result) {
@@ -86,7 +87,7 @@ if (isset($_POST['submit'])) {
           <!-- Topbar Search -->
           <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
               <div class="input-group-append">
                 <button class="btn btn-info" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -185,65 +186,7 @@ if (isset($_POST['submit'])) {
                 </a>
               </div>
             </li>
-
-            <div class="topbar-divider d-none d-sm-block"></div>
-
-            <!-- Nav Item - Alerts -->
-            <li class="nav-item dropdown no-arrow mx-1">
-              <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
-                <span class="badge badge-danger badge-counter">2</span>
-              </a>
-              <!-- Dropdown - Alerts -->
-              <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                <h6 class="dropdown-header bg-info">
-                  Notifications
-                </h6>
-
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-info">
-                      <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <span class="font-weight-bold">It's almost time for an subject ... !</span>
-                    <div class="small text-gray-500">December 12, 2020</div>
-                  </div>
-                </a>
-
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <span class="font-weight-bold">Cancel booking from ...!</span>
-                    <div class="small text-gray-500">December 7, 2020</div>
-                  </div>
-                </a>
-
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                  <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                      <i class="fas fa-donate text-white"></i>
-                    </div>
-                  </div>
-                  <div>
-                    <span class="font-weight-bold">Successfully booking subject ... !</span>
-                    <div class="small text-gray-500">December 7, 2020</div>
-                  </div>
-                </a>
-
-                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-              </div>
-            </li>
-
-
           </ul>
-
         </nav>
         <!-- End of Topbar -->
 
@@ -251,9 +194,7 @@ if (isset($_POST['submit'])) {
         <!-- Begin Page Content -->
         <!-- Outer Row -->
         <div class="row justify-content-center">
-
           <div class="col-xl-7 col-lg-8 col-md-3">
-
             <div class="card o-hidden border-0 shadow-lg my-5">
               <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
@@ -305,6 +246,12 @@ if (isset($_POST['submit'])) {
                           </div>
                         </div>
                         <div class="form-group row">
+                          <label class="col-sm-2 col-form-label font-weight-bold">Convenient date and time</label>
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-user" name="free_time" placeholder="วันจันทร์ 9.00น. - 11.00น. , วันพุธ 13.00น. - 16.00น." required>
+                          </div>
+                        </div>
+                        <div class="form-group row">
                           <label class="col-sm-2 col-form-label font-weight-bold">Picture</label>
                           <div class="col-sm-10">
                             <input type="file" class="form-control form-control-user" name="image" required>
@@ -322,11 +269,8 @@ if (isset($_POST['submit'])) {
             </div>
           </div>
         </div>
-
       </div>
-
       <!-- End of Content Wrapper -->
-
     </div>
     <!-- End of Page Wrapper -->
 

@@ -6,18 +6,30 @@ if (!isset($_SESSION['email'])) {
   header("location: login.php");
 }
 
+$varUID = $_SESSION['uid'];
+
+//user
+$sql_u = "SELECT * FROM user where uid = '$varUID'";
+$query_u = mysqli_query($connect, $sql_u);
+$result_u = mysqli_fetch_assoc($query_u);
+
 //question
-$sql = "SELECT * FROM webboard WHERE id='{$_GET['id']}' ";
+$sql = "SELECT * FROM webboard WHERE wid='{$_GET['wid']}' ";
 $query = mysqli_query($connect, $sql);
 $result = mysqli_fetch_assoc($query);
 
+//picture
+// $sqli = "SELECT pic FROM webboard WHERE id='{$_GET['id']}'";
+// $resulti = mysqli_query($connect, $sqli);
+// $rowi = mysqli_fetch_assoc($resulti);
+
 // answer
-$sql_a = "SELECT * FROM accept WHERE question_id='{$_GET['id']}' ";
+$sql_a = "SELECT * FROM accept WHERE wid='{$_GET['wid']}' order by id desc ";
 $query_a = mysqli_query($connect, $sql_a);
 $rows_a = mysqli_num_rows($query_a);
 
 // update view
-$sql_u = "UPDATE webboard SET view=view+1 WHERE id='{$_GET['id']}' ";
+$sql_u = "UPDATE webboard SET view=view+1 WHERE wid='{$_GET['wid']}' ";
 mysqli_query($connect, $sql_u);
 ?>
 <!DOCTYPE html>
@@ -84,8 +96,8 @@ mysqli_query($connect, $sql_u);
       <!-- Nav Item - Dashboard -->
       <li class="nav-item">
         <a class="nav-link" href="index.php">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Dashboard</span></a>
+          <i class="fas fa-fw fa-book"></i>
+          <span>Approve Booking</span></a>
       </li>
 
 
@@ -114,7 +126,7 @@ mysqli_query($connect, $sql_u);
       <li class="nav-item">
         <a class="nav-link" href="approve_professor.php">
           <i class="fas fa-user-check"></i>
-          <span>Approve</span></a>
+          <span>Approve Professor</span></a>
       </li>
 
 
@@ -146,7 +158,7 @@ mysqli_query($connect, $sql_u);
           <!-- Topbar Search -->
           <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
             <div class="input-group">
-              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+              <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
               <div class="input-group-append">
                 <button class="btn btn-primary" type="submit">
                   <i class="fas fa-search fa-sm"></i>
@@ -217,353 +229,86 @@ mysqli_query($connect, $sql_u);
         <!-- End of Topbar -->
 
         <!-- Begin Page Content -->
-        <!-- Begin Page Content -->
         <div class="container-fluid" style="min-height: 100vh;">
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <!-- <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a> -->
           </div>
-          <!-- Content Row -->
-          <div class="row">
-            <div class="card-body">
-              <!--<div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                  <thead>
-                    <tr>
-                      <th>ID</th>
-                      <th>Topic</th>
-                      <th>Detail</th>
-                      <th>Email</th>
-                      <th>Date Post</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php while ($row = mysqli_fetch_array($result)) : ?>
-                      <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['topic']; ?></td>
-                        <td><?php echo $row['detail']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['created']; ?></td>
 
-
-                        edit
-                        <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_post_Modal<?php echo $row['id']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
-                          <div class="modal fade" id="update_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="update_post_ModalLabel<?php echo $row['id']; ?>">Edit</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <form action="edit_post.php" method="post">
-                                  <div class="modal-body">
-                                    <div class="form-group">
-                                      <label for="topic" class="col-form-label">Topic:</label>
-                                      <input type="text" class="form-control" name="topic" value="<?php echo $row['topic']; ?>" required>
-                                    </div>
-                                    <div class="form-group">
-                                      <label for="detail" class="col-form-label">Detail:</label>
-                                      <input type="text" class="form-control" name="detail" value="<?php echo $row['detail']; ?>" required>
-                                    </div>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                    <button type="submit" class="btn btn-info">Save</button>
-                                  </div>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        </td>//-->
-
-
-              <!-- view -->
-              <td>
-                <!--<button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#view_post_Modal<?php echo $row['id']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
-
-                          <div class="modal fade" id="view_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="view_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="view_post_ModalLabel<?php echo $row['id']; ?>">Are you sure to delete?</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <div class="modal-body">
-                                  <p>ID : <?php echo $row['id']; ?></p>
-                                  <p>Topic : <?php echo $row['topic']; ?></p>
-                                  <p>Detail : <?php echo $row['detail']; ?></p>
-                                  <p>Email : <?php echo $row['email']; ?></p>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                  <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                                    Confirm
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>//-->
-                <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                  View
-                </a>
-              </td>
-
-
-              <!-- delete 
-                        <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_post_Modal<?php echo $row['id']; ?>">
-                            <i class="fas fa-trash"></i>
-                          </button>
-
-                          <div class="modal fade" id="delete_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="delete_post_ModalLabel<?php echo $row['id']; ?>">Are you sure to delete?</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <div class="modal-body">
-                                  <p>ID : <?php echo $row['id']; ?></p>
-                                  <p>Topic : <?php echo $row['topic']; ?></p>
-                                  <p>Detail : <?php echo $row['detail']; ?></p>
-                                  <p>Email : <?php echo $row['email']; ?></p>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                  <a href="delete_post.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                                    Confirm
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    <?php endwhile; ?>
-
-                    <tr>
-                      <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
-
-                        <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
-                          <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <form action="add_new_topic.php" method="post">
-                                <div class="modal-body">
-
-                                  <div class="form-group">
-                                    <label for="topic" class="col-form-label">Topic:</label>
-                                    <input type="text" class="form-control" name="topic" required>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="detail" class="col-form-label">Detail:</label>
-                                    <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
-                                  </div>
-                                  <div class="form-group">
-                                    <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
-                                  </div>
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn btn-info">Confirm</button>
-                                </div>
-                              </form>
-                            </div>
-                          </div>
+          <div class="container mt-5 mb-5">
+            <div class="row d-flex justify-content-center">
+              <div class="col-md-12">
+                <div class="comment-section">
+                  <div class="card p-3 border-blue mt-3 shadow"> <span class="dots"></span>
+                    <div class="d-flex justify-content-between mt-2">
+                      <div class="d-flex flex-row">
+                        <div class="user-image"> <img src="../img/profile.jpg" width="40" class="rounded-circle"> </div>
+                        &nbsp;&nbsp;
+                        <div class="d-flex flex-column">
+                          <h6 class="mb-0"><?php echo $result['email']; ?></h6> <span class="date"><?php echo $result['created']; ?></span>
                         </div>
-                      </td>
-                    </tr>
-
-                  </tbody>
-                </table>
-              </div>
-              </div>//-->
-
-              <table width="500" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#000000">
-                <tr>
-                  <td>
-                    <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF">
-                      <tr>
-                        <td colspan="3" bgcolor="#000000">
-                          <b style="color: #FFFFFF;font-size:32px;"><?php echo $result['topic']; ?></b>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>Email:</strong><?php echo $result['email']; ?>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>
-                          <strong>Detail:</strong><?php echo $result['detail']; ?>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td style="text-align: right;">
-                          <strong>Date:</strong> <?php echo $result['created']; ?>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-              <?php
-              if ($rows_a > 0) {
-                $i = 1;
-                while ($result_a = mysqli_fetch_assoc($query_a)) {
-              ?>
-                  <table width="500" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="#000000" style="margin-top:10px;">
-                    <tr>
-                      <td>
-                        <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF">
-                          <!--<tr>
-                            <td width="30%" style="text-align: right;"><strong>Name</strong></td>
-                            <td width="70%"><?php echo $result_a['name']; ?></td>
-                          </tr>
-                          <tr>
-                            <td valign="top" style="text-align: right;"><strong>Email</strong></td>
-                            <td><?php echo $result_a['email']; ?></td>
-                          </tr>//-->
-                          <tr>
-                            <!--<td style="text-align: left;"><strong>Comment: </strong><?php echo nl2br($result_a['detail']); ?></td>
-                            <td style="text-align: center;"><?php echo nl2br($result_a['detail']); ?>
-                            </td>-->
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                <?php
-                }
-              } else {
-                ?>
-                <!--<p style="text-align: center;color: red;"><?php echo nl2br($result['reply']); ?><strong> Interested</strong></p>-->
-              <?php
-              }
-              ?>
-
-              <!--<form id="add_answer" name="add_answer" method="post" action="add_answer.php">
-                <table width="500" border="0" align="center" cellpadding="0" cellspacing="1" bgcolor="blue" style="margin-top:15px;">
-                  <tr>
-                    <td>
-                      <table width="100%" border="0" cellpadding="3" cellspacing="1" bgcolor="#FFFFFF">
-                        <tr>
-                          <td colspan="3" bgcolor="#47d1d1"><b style="color: #FFFFFF;">Answer Question</b> </td>
-                        </tr>
-                        <tr>
-                          <td valign="top" style="text-align: right;"><strong>Detail</strong></td>
-                          <td><textarea name="detail" cols="50" rows="5" id="detail"></textarea></td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: right;"><strong>Name</strong></td>
-                          <td><input name="name" type="text" id="name" size="50" /></td>
-                        </tr>
-                        <tr>
-                          <td style="text-align: right;"><strong>Email</strong></td>
-                          <td><input name="email" type="text" id="email" size="50" /></td>
-                        </tr>
-                        <tr>
-                          <td>&nbsp;</td>
-                          <td>
-                            <input type="submit" name="submit" value="Save" class="btn btn-info" />
-                            <input type="reset" name="Submit2" value="Clear" class="btn btn-info" />
-                            <a href="index.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                              Back
-                            </a>
-                            <input type="button" name="Submit2" value="Back" onclick="header("Location: index.php")" />
-                          </td>
-                        </tr>
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-                <input type="hidden" name="id" value="<?php echo $result['id']; ?>">
-              </form>-->
-              <!--accept
-            </div>
-            <tr>
-              <div class="col-12">
-                <td>
-
-                  <button type="button" class="btn btn-info" data-toggle="modal" data-target="#accept_post_Modal" data-whatever="@mdo"><i>Accept Request</i></button>
-                  <div class="modal fade" id="accept_post_Modal" tabindex="-1" role="dialog" aria-labelledby="accept_post_ModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="accept_post_ModalLabel">Accept request</h5>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        <form action="accept_topic.php" method="post">
-                          <div class="modal-body">
-                            <label style="text-align:center" class="col-form-label">Are you sure to accept this request</label>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                              <button type="submit" class="btn btn-info">Confirm</button>
-                            </div>
-                        </form>
                       </div>
                     </div>
-                  </div>
-                </td>
-              </div>
-            </tr>-->
-
-              <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#accept_post_Modal" data-whatever="@mdo">Accept Request</button>
-                <div class="modal fade" id="accept_post_Modal" tabindex="-1" role="dialog" aria-labelledby="accept_post_ModalLabel" aria-hidden="true">
-                  <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="accept_post_ModalLabel">Accept request</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <form action="accept_topic.php" method="post">
-                        <div class="modal-body">
-                          <label class="col-form-label">Are you sure to accept this request</label>
-                          <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-info">Confirm</button>
+                    <hr>
+                    <h3 class="text-primary"><?php echo $result['topic']; ?></h3>
+                    <p class="content"><?php echo $result['detail']; ?></p>
+                    <?php
+                    if ($result['pic'] != NULL) {
+                      echo '<img src="data:image/jpeg;base64,' . base64_encode($result['pic']) . '" class="img-profile" height="auto" width="50%"/>';
+                    }
+                    ?>
+                    <hr>
+                    <div class="form">
+                      <form id="add_answer" name="add_answer" method="post" action="admin_answer.php">
+                        <input type="hidden" name="wid" value="<?php echo $result['wid']; ?>">
+                        <input type="hidden" name="uid" value="<?php echo $result_u['uid']; ?>">
+                        <input type="hidden" name="user_name" value="<?php echo $result_u['user_name']; ?>">
+                        <input type="hidden" name="email" value="<?php echo $result_u['email']; ?>">
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Write a comment..." name="comment" id="comment" required>
+                          <div class="input-group-append">
+                            <input class="btn btn-info btn-sm ms-1" type="submit" name="submit" value="Send"></input>
                           </div>
+                        </div>
                       </form>
                     </div>
+                    <?php
+                    if ($rows_a > 0) {
+                      $i = 1;
+                      while ($result_a = mysqli_fetch_assoc($query_a)) {
+                    ?>
+                        <hr>
+                        <h6 class="text-primary"><?php echo $result_a['email']; ?></h6>
+                        <?php echo nl2br($result_a['comment']); ?>
+                    <?php
+                      }
+                    }
+                    ?>
                   </div>
                 </div>
               </div>
-
-              <!-- End of Main Content -->
-
             </div>
-            <!-- End of Content Wrapper -->
-
           </div>
-        </div>
-        <!-- End of Page Wrapper -->
+          <!-- End of Main Content -->
 
-        <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
 
       </div>
-      <!-- End of Main Content -->
+      <!-- End of Content Wrapper -->
 
     </div>
-    <!-- End of Content Wrapper -->
+  </div>
+  <!-- End of Page Wrapper -->
+
+  <!-- /.container-fluid -->
+
+  </div>
+  <!-- End of Main Content -->
+
+  </div>
+  <!-- End of Content Wrapper -->
 
   </div>
   <!-- End of Page Wrapper -->

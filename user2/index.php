@@ -84,11 +84,11 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
             </li>
 
             <?php
-              if($_SESSION['level'] == 'u'){
-                echo '<li class="nav-item">
+            if ($_SESSION['level'] == 'u') {
+              echo '<li class="nav-item">
                   <a class="nav-link" href="professor_reg.php">Reg Prof</a>
                   </li>';
-              }
+            }
             ?>
 
 
@@ -116,16 +116,15 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
             <li class="nav-item dropdown no-arrow">
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <?php
-                      if($_SESSION['level'] == 'p'){
-                        echo '<img src="data:image/jpeg;base64,'.base64_encode($_SESSION['picture'] ).'" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
-                      }
-                      else{
-                        echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
-                      }
+                if ($_SESSION['level'] == 'p') {
+                  echo '<img src="data:image/jpeg;base64,' . base64_encode($_SESSION['picture']) . '" class= "img-profile rounded-circle" height="50px" width="50px" class="img-thumnail" />';
+                } else {
+                  echo '<img class="img-profile rounded-circle" src="../img/profile.jpg">';
+                }
                 ?>
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">&nbsp;&nbsp;
                   <?php if (isset($_SESSION['email'])) {
-                                echo $_SESSION['email'];
+                    echo $_SESSION['email'];
                   } ?>
                 </span>
               </a>
@@ -133,13 +132,13 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                 <?php
-                      if($_SESSION['level'] == 'p'){?>
-                        <a class="dropdown-item" href="profile.php">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
-                        </a><?php
-                      }
-                ?>
+                if ($_SESSION['level'] == 'p') { ?>
+                  <a class="dropdown-item" href="profile.php">
+                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                    Profile
+                  </a><?php
+                    }
+                      ?>
                 <!-- <a class="dropdown-item" href="#">
                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Profile
@@ -159,17 +158,17 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
                 </a>
               </div>
             </li>
-
+            <!--
             <div class="topbar-divider d-none d-sm-block"></div>
 
-            <!-- Nav Item - Alerts -->
+
             <li class="nav-item dropdown no-arrow mx-1">
               <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="fas fa-bell fa-fw"></i>
-                <!-- Counter - Alerts -->
+
                 <span class="badge badge-danger badge-counter">2</span>
               </a>
-              <!-- Dropdown - Alerts -->
+
               <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
                 <h6 class="dropdown-header bg-info">
                   Notifications
@@ -213,7 +212,7 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
 
                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
               </div>
-            </li>
+            </li> -->
 
 
           </ul>
@@ -253,13 +252,13 @@ $result = mysqli_query($connect, "SELECT * FROM booking ");
                     <!-- <div class="col-lg-6 d-none d-lg-block bg-login-image"></div> -->
                     <div class="col-lg-12">
                       <div class="p-5">
-                      <div class="text-center">
-                          <img class="img-profile rounded" src="../img/undraw_experts3_3njd.png" width = "500px">
+                        <div class="text-center">
+                          <img class="img-profile rounded" src="../img/undraw_experts3_3njd.png" width="500px">
                         </div>
                         <div class="text-left">
-                        <h2>What is <span class="badge badge-info">Engineering Clinic</span> ?</h2>
-                        <p>เป็นเว็ปไซต์สำหรับการนัดหมายกับที่ปรึกษาทางวิศวกรรม</p>
-                        <p>ซึ่งผู้ใช้สามารถสมัครเป็นที่ปรึกษาได้</p>
+                          <h2>What is <span class="badge badge-info">Engineering Clinic</span> ?</h2>
+                          <p>เป็นเว็ปไซต์สำหรับการนัดหมายกับที่ปรึกษาทางวิศวกรรม</p>
+                          <p>ซึ่งผู้ใช้สามารถสมัครเป็นที่ปรึกษาได้</p>
                         </div>
                       </div>
                     </div>

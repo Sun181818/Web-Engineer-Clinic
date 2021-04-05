@@ -9,12 +9,13 @@ $firstname = $_POST['firstname'];
 $lastname = $_POST['lastname'];
 $position = $_POST['position'];
 $expert = $_POST['expert'];
+$free_time = $_POST['free_time'];
 //$phone = $_POST['phonenumber'];
 $office = $_POST['office'];
 //$address = $_POST['address'];
 
 
-$q = "UPDATE professor SET title = '$title',firstname = '$firstname',lastname = '$lastname',position = '$position',expert = '$expert',office = '$office' WHERE pid = '$pid'";
+$q = "UPDATE professor SET title = '$title',firstname = '$firstname',lastname = '$lastname',position = '$position',expert = '$expert',office = '$office',free_time = '$free_time' WHERE pid = '$pid'";
 
 
 $result = mysqli_query($connect, $q);

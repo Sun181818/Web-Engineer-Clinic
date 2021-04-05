@@ -20,7 +20,7 @@ include '../connectdb.php';
     mysqli_query($connect,"UPDATE webboard SET reply=reply+1 WHERE wid='{$_POST['wid']}' ");
 
     if ($query) {
-        header("Location: view_topic.php?wid=$_POST[wid]");
+        header("Location: aView.php?wid=$_POST[wid]");
     } 
     else {
     echo "Fail" . mysqli_error($connect);

@@ -7,7 +7,10 @@ if (!isset($_SESSION['email'])) {
 
 include '../connectdb.php';
 
-$result = mysqli_query($connect, "SELECT * FROM webboard ");
+$varUID = $_SESSION['uid'];
+
+$result = mysqli_query($connect, "SELECT * FROM webboard order by created desc");
+$user_result = mysqli_query($connect, "SELECT * FROM webboard where uid = '$varUID' order by created desc");
 
 ?>
 <!DOCTYPE html>
@@ -63,7 +66,7 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                     <!-- Topbar Search -->
                     <form action="usersearch.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
                             <div class="input-group-append">
                                 <button class="btn btn-info" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -162,133 +165,175 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                                 </a>
                             </div>
                         </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">2</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header bg-info">
-                                    Notifications
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-info">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">New booking request BID 003 !</span>
-                                        <div class="small text-gray-500">December 12, 2020</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <span class="font-weight-bold">New booking request BID 004 !</span>
-                                        <div class="small text-gray-500">December 7, 2020</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                            </div>
-                        </li>
-
-
                     </ul>
-
                 </nav>
                 <!-- End of Topbar -->
 
-
+                <div style="position: fixed; bottom: 13px; right: 70px;">
+                    <td><button type="button" class="btn btn-info" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><h5>Create Post</h5></button>
+                </div>
                 <!-- Begin Page Content -->
                 <div class="container-fluid" style="min-height: 100vh;">
                     <!-- Page Heading -->
 
                     <!-- Content Row -->
-                    <div class="row justify-content-center">
-                        <div class="col-xl-8 col-lg-12 col-md-9">
-                            <?php while ($row = mysqli_fetch_array($result)) : ?>
-                                <?php
-                                $dbuid = $row['uid'];
-                                $dbuser = mysqli_query($connect, "SELECT * FROM user Where uid = '$dbuid'");
-                                while ($user = mysqli_fetch_array($dbuser)) : ?>
-                                    <div class="card shadow mb-2">
-                                        <div class="card-header py-3">
-                                            <a href="view_topic.php?id=<?php echo $row['id']; ?>" class="m-0 font-weight-bold text-primary"><?php echo $row['topic']; ?></a>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="font-weight-bold">
-                                                <div class="forum-sub-title"><?php echo $row['detail']; ?></div>
-                                            </div>
-                                            <hr>
-                                            <?php
-                                            if ($_SESSION['level'] == 'p' || $_SESSION['level'] == 'u') {
-                                                echo '<img class="img-profile rounded-circle p-2" src="../img/profile.jpg" height="50px" width="50px" >';
-                                            }
-                                            // } else {
-                                            //     echo '<img src="data:image/jpeg;base64,' . base64_encode($user['picture']) . '" class= "img-profile rounded-circle p-2 " height="auto" width="50px" class="img-thumnail" />';
-                                            // }
-                                            ?>
-                                            &nbsp;&nbsp;
-                                            <?php echo $user['user_name']; ?>
-                                        </div>
-                                    </div>
-                                <?php endwhile; ?>
-                            <?php endwhile; ?>
-                            <tr>
-                                <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
+                    <?php if ($_SESSION['level'] == 'p' || $_SESSION['level'] == 'a') { ?>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8 col-lg-12 col-md-9">
+                                <div class="d-flex flex-row-reverse">
+                                    <tr>
+                                        <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form action="add_new_topic.php" method="post" enctype="multipart/form-data">
+                                                        <div class="modal-body">
 
-                                    <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
+                                                            <div class="form-group">
+                                                                <label for="topic" class="col-form-label">Topic:</label>
+                                                                <input type="text" class="form-control" name="topic" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="detail" class="col-form-label">Detail:</label>
+                                                                <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="picture" class="col-form-label">Picture:</label>
+                                                                <input type="file" class="form-control form-control-user" name="image">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-info">Confirm</button>
+                                                        </div>
+                                                    </form>
                                                 </div>
-                                                <form action="add_new_topic.php" method="post" enctype="multipart/form-data">
-                                                    <div class="modal-body">
-
-                                                        <div class="form-group">
-                                                            <label for="topic" class="col-form-label">Topic:</label>
-                                                            <input type="text" class="form-control" name="topic" required>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="detail" class="col-form-label">Detail:</label>
-                                                            <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <label for="picture" class="col-form-label">Picture:</label>
-                                                            <input type="file" class="form-control form-control-user" name="image">
-                                                        </div>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                        <button type="submit" class="btn btn-info">Confirm</button>
-                                                    </div>
-                                                </form>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </tr>
+                                </div>
+                                <?php while ($row = mysqli_fetch_array($result)) : ?>
+                                    <?php
+                                    $date = date_create($row['created']);
+                                    $dbuid = $row['uid'];
+                                    $dbuser = mysqli_query($connect, "SELECT * FROM user Where uid = '$dbuid'");
+                                    while ($user = mysqli_fetch_array($dbuser)) : ?>
+                                        <div class="card shadow mb-2">
+                                            <div class="card-header py-3">
+                                                <a href="view_topic.php?wid=<?php echo $row['wid']; ?>" class="m-0 font-weight-bold text-primary"><?php echo $row['topic']; ?></a>
+                                                <div class="float-right">
+                                                    &nbsp;&nbsp;
+                                                    <?php echo date_format($date, 'd-F-Y'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div style="height: 50px;">
+                                                    <?php
+                                                    if ($_SESSION['level'] == 'p' || $_SESSION['level'] == 'u') {
+                                                        echo '<img class="img-profile rounded-circle p-2" src="../img/profile.jpg" height="50px" width="50px" >';
+                                                    }
+                                                    // } else {
+                                                    //     echo '<img src="data:image/jpeg;base64,' . base64_encode($user['picture']) . '" class= "img-profile rounded-circle p-2 " height="auto" width="50px" class="img-thumnail" />';
+                                                    // }
+                                                    ?>
+                                                    &nbsp;&nbsp;
+                                                    <?php echo $user['user_name']; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endwhile; ?>
+                                <?php endwhile; ?>
+                            </div>
                         </div>
-                        <!-- End of Main Content -->
-                    </div>
+                    <?php
+                    } else { ?>
+                        <div class="row justify-content-center">
+                            <div class="col-xl-8 col-lg-12 col-md-9">
+                                <div class="d-flex flex-row-reverse">
+                                    <tr>
+                                        <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <form action="add_new_topic.php" method="post" enctype="multipart/form-data">
+                                                        <div class="modal-body">
+
+                                                            <div class="form-group">
+                                                                <label for="topic" class="col-form-label">Topic:</label>
+                                                                <input type="text" class="form-control" name="topic" required>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="detail" class="col-form-label">Detail:</label>
+                                                                <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="picture" class="col-form-label">Picture:</label>
+                                                                <input type="file" class="form-control form-control-user" name="image">
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                            <button type="submit" class="btn btn-info">Confirm</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </div>
+                                <?php while ($row = mysqli_fetch_array($user_result)) : ?>
+                                    <?php
+                                    $date = date_create($row['created']);
+                                    $dbuid = $row['uid'];
+                                    $dbuser = mysqli_query($connect, "SELECT * FROM user Where uid = '$dbuid'");
+                                    while ($user = mysqli_fetch_array($dbuser)) : ?>
+                                        <div class="card shadow mb-2">
+                                            <div class="card-header py-3">
+                                                <a href="view_topic.php?wid=<?php echo $row['wid']; ?>" class="m-0 font-weight-bold text-primary"><?php echo $row['topic']; ?></a>
+                                                <div class="float-right">
+                                                    &nbsp;&nbsp;
+                                                    <?php echo date_format($date, 'd-F-Y'); ?>
+                                                </div>
+                                            </div>
+                                            <div class="card-body">
+                                                <div style="height: 50px;">
+                                                    <?php
+                                                    if ($_SESSION['level'] == 'p' || $_SESSION['level'] == 'u') {
+                                                        echo '<img class="img-profile rounded-circle p-2" src="../img/profile.jpg" height="50px" width="50px" >';
+                                                    }
+                                                    // } else {
+                                                    //     echo '<img src="data:image/jpeg;base64,' . base64_encode($user['picture']) . '" class= "img-profile rounded-circle p-2 " height="auto" width="50px" class="img-thumnail" />';
+                                                    // }
+                                                    ?>
+                                                    &nbsp;&nbsp;
+                                                    <?php echo $user['user_name']; ?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <?php endwhile; ?>
+                                <?php endwhile; ?>
+                            </div>
+                        </div>
+                    <?php
+                    }
+                    ?>
+                    <!-- End of Main Content -->
                     <!-- End of Content Wrapper -->
                 </div>
                 <!-- End of Page Wrapper -->

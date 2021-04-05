@@ -55,8 +55,8 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Approve Booking</span></a>
             </li>
 
 
@@ -85,7 +85,7 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
             <li class="nav-item">
                 <a class="nav-link" href="approve_professor.php">
                     <i class="fas fa-user-check"></i>
-                    <span>Approve</span></a>
+                    <span>Approve Professor</span></a>
             </li>
 
 
@@ -117,7 +117,7 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                     <!-- Topbar Search -->
                     <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -197,7 +197,10 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                     </div>
                     <!-- Content Row -->
                     <div class="card shadow mb-4">
-                        <div class="row">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Webboard</h6>
+                        </div>
+
                             <div class="card-body">
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -205,7 +208,7 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                                             <tr>
                                                 <th>ID</th>
                                                 <th>Topic</th>
-                                                <th>Detail</th>
+                                                <!-- <th>Detail</th> -->
                                                 <th>Email</th>
                                                 <th>Date Post</th>
                                             </tr>
@@ -213,126 +216,20 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
                                         <tbody>
                                             <?php while ($row = mysqli_fetch_array($result)) : ?>
                                                 <tr>
-                                                    <td><?php echo $row['id']; ?></td>
+                                                    <td><?php echo $row['wid']; ?></td>
                                                     <td><?php echo $row['topic']; ?></td>
-                                                    <td><?php echo $row['detail']; ?></td>
+                                                    <!-- <td><?php echo $row['detail']; ?></td> -->
                                                     <td><?php echo $row['email']; ?></td>
                                                     <td><?php echo $row['created']; ?></td>
 
-
-                                                    <!-- edit --
-                                                <td><button type="button" class="btn btn-warning btn-circle btn-sm" data-toggle="modal" data-target="#update_post_Modal<?php echo $row['id']; ?>" data-whatever="@mdo"><i class="fas fa-edit"></i></button>
-                                                    <div class="modal fade" id="update_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="update_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="update_post_ModalLabel<?php echo $row['id']; ?>">Edit</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form action="edit_post.php" method="post">
-                                                                    <div class="modal-body">
-                                                                        <div class="form-group">
-                                                                            <label for="topic" class="col-form-label">Topic:</label>
-                                                                            <input type="text" class="form-control" name="topic" value="<?php echo $row['topic']; ?>" required>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="detail" class="col-form-label">Detail:</label>
-                                                                            <input type="text" class="form-control" name="detail" value="<?php echo $row['detail']; ?>" required>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                                        <button type="submit" class="btn btn-info">Save</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-
-                                                 delete 
-                                                <td><button type="button" class="btn btn-danger btn-circle btn-sm" data-toggle="modal" data-target="#delete_post_Modal<?php echo $row['id']; ?>">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-
-                                                    <div class="modal fade" id="delete_post_Modal<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="delete_post_ModalLabel<?php echo $row['id']; ?>" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="delete_post_ModalLabel<?php echo $row['id']; ?>">Are you sure to delete?</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <p>ID : <?php echo $row['id']; ?></p>
-                                                                    <p>Topic : <?php echo $row['topic']; ?></p>
-                                                                    <p>Detail : <?php echo $row['detail']; ?></p>
-                                                                    <p>Email : <?php echo $row['email']; ?></p>
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                                                    <a href="delete_post.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
-                                                                        Confirm
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>//-->
-
                                                     <!--view-->
                                                     <td>
-                                                        <a href="aView.php?id=<?php echo $row['id']; ?>" class="btn btn-info">
+                                                        <a href="aView.php?wid=<?php echo $row['wid']; ?>" class="btn btn-primary">
                                                             View
                                                         </a>
                                                     </td>
 
                                                 <?php endwhile; ?>
-
-                                                <!--<tr>
-                                                <td><button type="button" class="btn btn-success btn-circle btn-sm" data-toggle="modal" data-target="#add_post_Modal" data-whatever="@mdo"><i class="fas fa-plus"></i></button>
-
-                                                    <div class="modal fade" id="add_post_Modal" tabindex="-1" role="dialog" aria-labelledby="add_post_ModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="add_post_ModalLabel">New Post</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <form action="add_new_topic.php" method="post">
-                                                                    <div class="modal-body">
-
-                                                                        <div class="form-group">
-                                                                            <label for="topic" class="col-form-label">Topic:</label>
-                                                                            <input type="text" class="form-control" name="topic" required>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <label for="detail" class="col-form-label">Detail:</label>
-                                                                            <textarea class="form-control" aria-label="With textarea" name="detail" required></textarea>
-                                                                        </div>
-                                                                        <div class="form-group">
-                                                                            <input type="hidden" class="form-control" value="<?php echo $_SESSION['email']; ?>" name="email" aria-label="Disabled input example">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                                                        <button type="submit" class="btn btn-info">Confirm</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                            </tr>-->
-
                                         </tbody>
                                     </table>
                                 </div>
@@ -340,7 +237,6 @@ $result = mysqli_query($connect, "SELECT * FROM webboard ");
 
                             <!-- End of Main Content -->
 
-                        </div>
                         <!-- End of Content Wrapper -->
                     </div>
                 </div>

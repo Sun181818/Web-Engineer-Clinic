@@ -66,8 +66,8 @@ $connect->close();
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
                 <a class="nav-link" href="index.php">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Dashboard</span></a>
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Approve Booking</span></a>
             </li>
 
 
@@ -96,7 +96,7 @@ $connect->close();
             <li class="nav-item">
                 <a class="nav-link" href="approve_professor.php">
                     <i class="fas fa-user-check"></i>
-                    <span>Approve</span></a>
+                    <span>Approve Professor</span></a>
             </li>
 
 
@@ -128,7 +128,7 @@ $connect->close();
                     <!-- Topbar Search -->
                     <form action="search.php" method="post" class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                         <div class="input-group">
-                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                            <input type="text" name="search" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2" required>
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
                                     <i class="fas fa-search fa-sm"></i>
@@ -203,7 +203,7 @@ $connect->close();
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-2 text-gray-800">Search Results</h1>
+                    <h1 class="h3 mb-2 text-gray-800">Search Results for "<?php echo $search ?>"</h1>
 
 
                     <!-- DataProfressor  -->

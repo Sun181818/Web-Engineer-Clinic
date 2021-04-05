@@ -45,6 +45,7 @@
                                     {
                                             // echo '<img src="data:image/jpeg;base64,'.base64_encode($row['picture'] ).'" height="auto" width="10%" class="img-thumnail" />';
                                             $_SESSION['picture'] = $row['picture'];
+                                            $_SESSION['pid'] = $row['pid'];
                                     }
                                 }
                                 $_SESSION['success'] = "Successfully Login";
