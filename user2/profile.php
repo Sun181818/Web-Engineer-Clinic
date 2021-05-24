@@ -10,7 +10,7 @@ $varUID = $_SESSION['uid'];
 $varEmail = $_SESSION['email'];
 
 
-$stmt = $db->prepare("SELECT * FROM professor WHERE user_id = '$varUID' limit 1");
+$stmt = $db->prepare("SELECT * FROM professor WHERE status = '1' and user_id = '$varUID' limit 1");
 $stmt->bindParam("upid", $pid);
 $stmt->execute();
 
